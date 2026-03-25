@@ -8,35 +8,96 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Custom Styles -->
     <?= $this->renderSection('styles') ?>
-    
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        main {
-            flex: 1;
-        }
-        
-        .sidebar {
-            min-height: calc(100vh - 56px);
-        }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('/css/main.css'); ?>">
+
 </head>
 <body>
-    <!-- Sidebar -->
-    <?= $this->include('/layouts/sidebar'); ?>
-    <main>
-        <?= $this->renderSection('content'); ?>
-    </main>
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <?= $this->include('/layouts/sidebar'); ?>
+        
+        <!-- Top Navbar -->
+        <div style="width: 100%; display: flex; flex-direction: column;">
+            <nav class="top-navbar d-flex align-items-center px-4 py-3">
+                <button class="toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <span class="ms-3 text-muted">Menu</span>
+            </nav>
+
+            <!-- Main Content -->
+            <main id="mainContent">
+                <div class="py-4 px-4">
+                    <?= $this->include('/layouts/navbar'); ?>
+                    <!-- Flash Messages -->
+                    <?php if (session()->has('message')): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle me-2"></i>
+                            <?= session('message') ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->has('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            <?= session('error') ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                <!-- Page Content -->
+                <?= $this->renderSection('content'); ?>
+                </div>
+            </main>
+        </div>
+    </div>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sidebar Toggle Script -->
+    <script>
+        const sidebar = document.getElementById('sidebarNav');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        // Toggle sidebar
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('hide');
+            mainContent.classList.toggle('sidebar-hidden');
+            
+            // Save state to localStorage
+            localStorage.setItem('sidebarHidden', sidebar.classList.contains('hide'));
+        });
+
+        // Restore sidebar state from localStorage on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const isHidden = localStorage.getItem('sidebarHidden') === 'true';
+            if (isHidden) {
+                sidebar.classList.add('hide');
+                mainContent.classList.add('sidebar-hidden');
+            }
+        });
+
+        // Close sidebar on mobile when clicking a menu item
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (window.innerWidth < 768 && !sidebar.classList.contains('hide')) {
+                    sidebar.classList.add('hide');
+                    mainContent.classList.add('sidebar-hidden');
+                }
+            });
+        });
+    </script>
     
     <!-- Custom Scripts -->
     <?= $this->renderSection('scripts') ?>
