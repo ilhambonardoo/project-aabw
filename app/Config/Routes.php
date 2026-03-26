@@ -12,3 +12,5 @@ $routes->post('login/process', 'Auth::loginProcess');
 $routes->get('register', 'Auth::register');
 $routes->post('register/process', 'Auth::registerProcess');
 $routes->get('logout', 'Auth::logout');
+
+$routes->get('dashboard', 'Dashboard::index');
