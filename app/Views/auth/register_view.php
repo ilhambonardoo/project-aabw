@@ -169,7 +169,7 @@
                     <span>Sudah punya akun?</span>
                 </div>
 
-                <a href="<?= base_url('auth/login') ?>" class="btn btn-outline-primary btn-lg w-100">
+                <a href="<?= base_url('login') ?>" class="btn btn-outline-primary btn-lg w-100">
                     <i class="bi bi-box-arrow-in-right me-2"></i>Kembali ke Login
                 </a>
             </div>

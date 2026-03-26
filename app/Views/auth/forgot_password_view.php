@@ -93,14 +93,14 @@
                 <div style="text-align: center;">
                     <p style="margin-bottom: 15px; color: #6c757d; font-size: 14px;">
                         Ingat kata sandinya?
-                        <a href="<?= base_url('auth/login') ?>" class="forgot-link" style="display: inline;">
+                        <a href="<?= base_url('login') ?>" class="forgot-link" style="display: inline;">
                             Kembali ke Login
                         </a>
                     </p>
 
                     <p style="margin-bottom: 0; color: #6c757d; font-size: 14px;">
                         Belum punya akun?
-                        <a href="<?= base_url('auth/register') ?>" class="forgot-link" style="display: inline;">
+                        <a href="<?= base_url('register') ?>" class="forgot-link" style="display: inline;">
                             Daftar Sekarang
                         </a>
                     </p>

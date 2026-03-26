@@ -108,7 +108,7 @@
                     <span>Belum punya akun?</span>
                 </div>
 
-                <a href="<?= base_url('auth/register') ?>" class="btn btn-outline-primary btn-lg w-100">
+                <a href="<?= base_url('register') ?>" class="btn btn-outline-primary btn-lg w-100">
                     <i class="bi bi-person-plus me-2"></i>Buat Akun Baru
                 </a>
             </div>
