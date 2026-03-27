@@ -1,0 +1,136 @@
+.sidebar {
+  transition: all 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.nav-link.active {
+  background-color: #198754 !important;
+  color: #ffffff !important;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(25, 135, 84, 0.25);
+}
+
+.nav-link.active i {
+  color: #ffffff;
+}
+
+.nav-link.active span {
+  color: #ffffff;
+}
+
+.nav-link.active .bi-chevron-down {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.nav-link.link-dark {
+  color: #212529;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link.link-dark:hover {
+  background-color: rgba(25, 135, 84, 0.08);
+  color: #198754;
+}
+
+.nav-link.link-dark i {
+  transition: color 0.3s ease;
+}
+
+.nav-link.link-dark:hover i {
+  color: #198754;
+}
+
+.nav-link.submenu-toggle .bi-chevron-down {
+  transition: transform 0.3s ease;
+}
+
+.nav-link.submenu-toggle:not(.collapsed) .bi-chevron-down {
+  transform: rotate(180deg);
+}
+
+.collapse .nav-link {
+  padding-left: 1rem;
+  font-size: 0.9rem;
+}
+
+.collapse .nav-link.active {
+  background-color: rgba(25, 135, 84, 0.1);
+  color: #198754;
+  border-left: 3px solid #198754;
+  padding-left: calc(1rem - 3px);
+}
+
+.collapse .nav-link.active i {
+  color: #198754;
+}
+
+.collapse .nav-link.link-dark {
+  color: #626262;
+}
+
+.collapse .nav-link.link-dark:hover {
+  background-color: rgba(25, 135, 84, 0.05);
+  color: #198754;
+  border-left: 3px solid #198754;
+  padding-left: calc(1rem - 3px);
+}
+
+.collapse {
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.collapse.show {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-item:hover .nav-link.link-dark {
+  background-color: rgba(25, 135, 84, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.nav .text-uppercase {
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 250px !important;
+  }
+
+  .nav-link span {
+    font-size: 0.95rem;
+  }
+}

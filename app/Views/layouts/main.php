@@ -5,33 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->renderSection('title') ?> - App</title>
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom Styles -->
-    <?= $this->renderSection('styles') ?>
     <link rel="stylesheet" href="<?= base_url('/css/main.css'); ?>">
+    <link rel="stylesheet" href="<?= base_url('/css/sidebar.css'); ?>">
+
 
 </head>
 <body>
     <div class="main-wrapper">
-        <!-- Sidebar -->
         <?= $this->include('/layouts/sidebar'); ?>
         
         <!-- Top Navbar -->
         <div style="width: 100%; display: flex; flex-direction: column;">
-            <nav class="top-navbar d-flex align-items-center px-4 py-3">
-                <button class="toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
-                    <i class="bi bi-list fs-5"></i>
-                </button>
-                <span class="ms-3 text-muted">Menu</span>
-            </nav>
 
             <!-- Main Content -->
             <main id="mainContent">
@@ -61,25 +49,20 @@
         </div>
     </div>
     
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Sidebar Toggle Script -->
     <script>
         const sidebar = document.getElementById('sidebarNav');
         const mainContent = document.getElementById('mainContent');
         const toggleBtn = document.getElementById('sidebarToggle');
 
-        // Toggle sidebar
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('hide');
             mainContent.classList.toggle('sidebar-hidden');
             
-            // Save state to localStorage
             localStorage.setItem('sidebarHidden', sidebar.classList.contains('hide'));
         });
 
-        // Restore sidebar state from localStorage on page load
         window.addEventListener('DOMContentLoaded', function() {
             const isHidden = localStorage.getItem('sidebarHidden') === 'true';
             if (isHidden) {
@@ -88,7 +71,6 @@
             }
         });
 
-        // Close sidebar on mobile when clicking a menu item
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 if (window.innerWidth < 768 && !sidebar.classList.contains('hide')) {
