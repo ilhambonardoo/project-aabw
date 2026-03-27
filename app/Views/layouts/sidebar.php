@@ -1,7 +1,5 @@
-<!-- Sidebar Navigation -->
 <nav class="sidebar bg-white" id="sidebarNav" style="width: 280px; height: 100vh; position: fixed; left: 0; top: 0; box-shadow: 2px 0 10px rgba(0,0,0,0.05); overflow-y: auto; z-index: 1000;">
     <div class="d-flex flex-column p-3">
-        <!-- Logo Section -->
         <div class="mb-4">
             <a href="/" class="d-flex align-items-center text-decoration-none">
                 <div class="icon-circle bg-success bg-opacity-10 rounded-3 p-2 me-3">
@@ -16,39 +14,46 @@
 
         <hr class="my-2">
 
-        <!-- Navigation Menu -->
         <ul class="nav nav-pills flex-column gap-1 flex-grow-1">
-            <!-- Dashboard -->
+            <?php 
+            $currentUri = uri_string();
+            $dashboardActive = (strpos($currentUri, 'dashboard') !== false || $currentUri === '');
+            ?>
             <li class="nav-item">
-                <a href="#" class="nav-link active rounded-3 d-flex align-items-center gap-3 px-3 py-2 fw-500" style="transition: all 0.3s ease;">
+                <a href="/dashboard" class="nav-link <?php echo $dashboardActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2 fw-500" style="transition: all 0.3s ease;">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
-            <!-- Daftar Akun with Dropdown -->
+            <?php 
+            $akun1Active = strpos($currentUri, 'akun1') !== false;
+            $akun2Active = strpos($currentUri, 'akun2') !== false;
+            $akun3Active = strpos($currentUri, 'akun3') !== false;
+            $daftarAkunActive = $akun1Active || $akun2Active || $akun3Active;
+            ?>
             <li class="nav-item">
-                <a href="#daftarAkunMenu" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
+                <a href="#daftarAkunMenu" class="nav-link <?php echo $daftarAkunActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
                     <i class="bi bi-person-lines-fill"></i>
                     <span>Daftar Akun</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <div class="collapse" id="daftarAkunMenu">
+                <div class="collapse <?php echo $daftarAkunActive ? 'show' : ''; ?>" id="daftarAkunMenu">
                     <ul class="nav flex-column ms-3 mt-1 gap-1">
                         <li class="nav-item">
-                            <a href="#" class="nav-link link-dark rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/akun1" class="nav-link <?php echo $akun1Active ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Akun 1</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link link-dark rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/akun2" class="nav-link <?php echo $akun2Active ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Akun 2</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link link-dark rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/akun3" class="nav-link <?php echo $akun3Active ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Akun 3</span>
                             </a>
@@ -57,12 +62,10 @@
                 </div>
             </li>
 
-            <!-- SIKLUS AKUNTANSI SECTION -->
             <li class="mt-3">
                 <span class="text-muted small fw-bold text-uppercase px-3">Siklus Akuntansi</span>
             </li>
 
-            <!-- 1. Transaksi Umum -->
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-arrow-left-right"></i>
@@ -70,7 +73,6 @@
                 </a>
             </li>
 
-            <!-- 2. Jurnal Umum -->
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-journal-text"></i>
@@ -78,7 +80,6 @@
                 </a>
             </li>
 
-            <!-- 3. Buku Besar (Posting) -->
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-book"></i>
@@ -86,7 +87,6 @@
                 </a>
             </li>
 
-            <!-- 4. Neraca Saldo -->
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-graph-up"></i>
@@ -94,7 +94,6 @@
                 </a>
             </li>
 
-            <!-- 5. Transaksi Penyesuaian -->
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-arrow-repeat"></i>
@@ -102,7 +101,6 @@
                 </a>
             </li>
 
-            <!-- 6. Jurnal Penyesuaian -->
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-journal-check"></i>
@@ -110,7 +108,6 @@
                 </a>
             </li>
 
-            <!-- 7. Neraca Saldo Disesuaikan -->
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-graph-down"></i>
@@ -118,7 +115,6 @@
                 </a>
             </li>
 
-            <!-- 8. Laporan Keuangan (Dropdown) -->
             <li class="nav-item">
                 <a href="#laporanKeuanganMenu" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
                     <i class="bi bi-file-earmark-text"></i>
@@ -160,7 +156,6 @@
 
         <hr class="my-2">
 
-        <!-- User Profile Section -->
         <div class="dropdown">
             <button class="btn btn-light w-100 d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-start" type="button" data-bs-toggle="dropdown" style="transition: all 0.3s ease;">
                 <div class="avatar-sm bg-success bg-opacity-10 rounded-3 p-2">
@@ -193,7 +188,6 @@
 
 
 <script>
-    // Smooth animations for submenu items
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
             if (this.getAttribute('href') === '#') {
