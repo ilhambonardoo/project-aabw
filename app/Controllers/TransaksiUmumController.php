@@ -26,9 +26,9 @@ class TransaksiUmumController extends BaseController
         $tgl_akhir = $this->request->getGet('tgl_akhir');
 
         if($tgl_awal && $tgl_akhir){
-            $transaksi = $this->transaksiModel->where('tanggal >=', $tgl_awal)->where('tanggal <=', $tgl_akhir)->orderBy('tanggal', 'DESC')->findAll();
+            $transaksi = $this->transaksiModel->where('jenis_transaksi', 'umum')->where('tanggal >=', $tgl_awal)->where('tanggal <=', $tgl_akhir)->orderBy('tanggal', 'DESC')->findAll();
         } else {
-            $transaksi = $this->transaksiModel->orderBy('tanggal', 'DESC')->findAll();
+            $transaksi = $this->transaksiModel->where('jenis_transaksi', 'umum')->orderBy('tanggal', 'DESC')->findAll();
         }
 
         $data = [
@@ -59,6 +59,7 @@ class TransaksiUmumController extends BaseController
     {
         $this->transaksiModel->save([
             'no_transaksi'      => $this->request->getPost('no_transaksi'),
+            'jenis_transaksi'   => 'Umum',
             'tanggal'           => $this->request->getPost('tanggal'),
             'deskripsi'         => $this->request->getPost('deskripsi'),
             'keterangan_jurnal' => $this->request->getPost('keterangan_jurnal'),
