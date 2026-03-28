@@ -87,7 +87,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link rounded-2 d-flex <?php echo $transaksiPenyesuaian ? 'active' : 'link-dark' ?> align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/transaksi-penyesuaian" class="nav-link rounded-2 d-flex <?php echo $transaksiPenyesuaian ? 'active' : 'link-dark' ?> align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Transaksi Penyesuaian</span>
                             </a>
