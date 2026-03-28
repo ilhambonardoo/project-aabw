@@ -49,19 +49,21 @@
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const sidebar = document.getElementById('sidebarNav');
         const mainContent = document.getElementById('mainContent');
         const toggleBtn = document.getElementById('sidebarToggle');
 
-        toggleBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('hide');
-            mainContent.classList.toggle('sidebar-hidden');
-            
-            localStorage.setItem('sidebarHidden', sidebar.classList.contains('hide'));
-        });
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('hide');
+                mainContent.classList.toggle('sidebar-hidden');
+                
+                localStorage.setItem('sidebarHidden', sidebar.classList.contains('hide'));
+            });
+        }
 
         window.addEventListener('DOMContentLoaded', function() {
             const isHidden = localStorage.getItem('sidebarHidden') === 'true';
@@ -80,8 +82,9 @@
             });
         });
     </script>
-    
-    <!-- Custom Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <?= $this->renderSection('scripts') ?>
 </body>
 </html>

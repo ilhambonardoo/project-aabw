@@ -17,6 +17,7 @@ $routes->get('logout', 'Auth::logout');
 
 $routes->get('dashboard', 'Dashboard::index');
 
+// Routes untuk master Akun
 $routes->get('/akun1', "Akun1Controller::index");
 $routes->get('/akun1/create', "Akun1Controller::create");
 $routes->post('/akun1/store', "Akun1Controller::store");
@@ -31,3 +32,16 @@ $routes->get('/akun3', "Akun3Controller::index");
 $routes->get('/akun3/create', "Akun3Controller::create");
 $routes->post('/akun3/store', "Akun3Controller::store");
 $routes->get('/akun3/delete/(:num)', 'Akun3Controller::delete/$1');
+
+
+// Routes untuk Transaksi Umum
+$routes->get('/transaksi-umum', 'TransaksiUmumController::index');
+
+$routes->get('/transaksi-umum/create', 'TransaksiUmumController::create');
+$routes->post('/transaksi-umum/store', 'TransaksiUmumController::store');
+
+$routes->get('/transaksi-umum/edit/(:num)', 'TransaksiUmumController::edit/$1');
+$routes->post('/transaksi-umum/update/(:num)', 'TransaksiUmumController::update/$1');
+
+$routes->get('/transaksi-umum/detail/(:num)', 'TransaksiUmumController::detail/$1');
+$routes->get('/transaksi-umum/delete/(:num)', 'TransaksiUmumController::delete/$1');
