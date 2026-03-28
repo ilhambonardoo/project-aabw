@@ -45,3 +45,13 @@ $routes->post('/transaksi-umum/update/(:num)', 'TransaksiUmumController::update/
 
 $routes->get('/transaksi-umum/detail/(:num)', 'TransaksiUmumController::detail/$1');
 $routes->get('/transaksi-umum/delete/(:num)', 'TransaksiUmumController::delete/$1');
+
+
+// Routes untuk Transaksi Penyesuaian
+$routes->get('/transaksi-penyesuaian', 'TransaksiPenyesuaianController::index');
+$routes->get('/transaksi-penyesuaian/create', 'TransaksiPenyesuaianController::create');
+$routes->post('/transaksi-penyesuaian/store', 'TransaksiPenyesuaianController::store');
+$routes->get('/transaksi-penyesuaian/edit/(:num)', 'TransaksiPenyesuaianController::edit/$1');
+$routes->post('/transaksi-penyesuaian/update/(:num)', 'TransaksiPenyesuaianController::update/$1');
+$routes->get('/transaksi-penyesuaian/detail/(:num)', 'TransaksiPenyesuaianController::detail/$1');
+$routes->get('/transaksi-penyesuaian/delete/(:num)', 'TransaksiPenyesuaianController::delete/$1');
