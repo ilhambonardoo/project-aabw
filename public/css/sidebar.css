@@ -35,7 +35,7 @@
   color: #ffffff;
 }
 
-.nav-link.active .bi-chevron-down {
+.nav-link.active[aria-expanded="true"] .bi-chevron-up {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
 }
@@ -59,11 +59,11 @@
   color: #198754;
 }
 
-.nav-link.submenu-toggle .bi-chevron-down {
+.nav-link.submenu-toggle .bi-chevron-up {
   transition: transform 0.3s ease;
 }
 
-.nav-link.submenu-toggle:not(.collapsed) .bi-chevron-down {
+.nav-link.submenu-toggle[aria-expanded="true"] .bi-chevron-up {
   transform: rotate(180deg);
 }
 

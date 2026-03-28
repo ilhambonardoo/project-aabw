@@ -36,7 +36,7 @@
                 <a href="#daftarAkunMenu" class="nav-link <?php echo $daftarAkunActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
                     <i class="bi bi-person-lines-fill"></i>
                     <span>Daftar Akun</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-chevron-up ms-auto"></i>
                 </a>
                 <div class="collapse <?php echo $daftarAkunActive ? 'show' : ''; ?>" id="daftarAkunMenu">
                     <ul class="nav flex-column ms-3 mt-1 gap-1">
@@ -66,11 +66,35 @@
                 <span class="text-muted small fw-bold text-uppercase px-3">Siklus Akuntansi</span>
             </li>
 
+            <?php 
+            $transaksiUmum = strpos($currentUri, 'transaksi-umum') !== false;
+            $transaksiPenyesuaian = strpos($currentUri, 'transaksi-penyesuaian') !== false;
+            $daftarTransaksiActive = $transaksiUmum || $transaksiPenyesuaian
+            ?>
+
             <li class="nav-item">
-                <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
+                <a href="#daftarTransaksiMenu" class="nav-link link-dark rounded-3 d-flex align-items-center <?php echo $daftarTransaksiActive ? 'active' : 'link-dark'; ?> gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
                     <i class="bi bi-arrow-left-right"></i>
-                    <span>Transaksi Umum</span>
+                    <span>Transaksi</span>
+                    <i class="bi bi-chevron-up ms-auto"></i>
                 </a>
+                <div class="collapse  <?php echo $daftarTransaksiActive ? 'show' : ''; ?>" id="daftarTransaksiMenu">
+                    <ul class="nav flex-column ms-3 mt-1 gap-1">
+                        <li class="nav-item">
+                            <a href="/transaksi-umum" class="nav-link rounded-2 d-flex <?php echo $transaksiUmum ? 'active' : 'link-dark' ?>  align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                                <i class="bi bi-record2-fill"></i>
+                                <span>Transaksi Umum</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link rounded-2 d-flex <?php echo $transaksiPenyesuaian ? 'active' : 'link-dark' ?> align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                                <i class="bi bi-record2-fill"></i>
+                                <span>Transaksi Penyesuaian</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
             </li>
 
             <li class="nav-item">
