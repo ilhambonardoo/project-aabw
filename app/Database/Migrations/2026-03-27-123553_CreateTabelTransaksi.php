@@ -20,6 +20,11 @@ class CreateTabelTransaksi extends Migration
                 'constraint' => '50',
                 'unique' => true,
             ],
+            'jenis_transaksi' => [
+                'type'       => 'ENUM',
+                'constraint' => ['Umum', 'Penyesuaian'],
+                'default'    => 'Umum',
+            ],
             'tanggal' => [
                 'type' => 'DATE'
             ], 
