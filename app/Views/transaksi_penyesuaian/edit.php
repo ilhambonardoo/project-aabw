@@ -2,35 +2,30 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid">
-    <div class="d-flex align-items-center mb-4">
-        <a href="/transaksi-penyesuaian" class="btn btn-secondary btn-sm" style="margin-right: 15px;">
-            &larr; Back
-        </a>
-        <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center">
+            <a href="/transaksi-penyesuaian" class="btn btn-secondary btn-sm me-3 shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back
+            </a>
+            <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
+        </div>
     </div>
 
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Edit Data Transaksi: <?= esc($transaksi['no_transaksi']) ?></h6>
-        </div>
         <div class="card-body">
             <form action="/transaksi-penyesuaian/update/<?= $transaksi['id'] ?>" method="POST" id="formTransaksi">
                 
-                <div class="row mb-4 bg-light p-3 rounded">
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <label class="font-weight-bold">No. Transaksi</label>
-                        <input type="text" class="form-control text-muted" value="<?= esc($transaksi['no_transaksi']) ?>" readonly style="cursor: not-allowed;">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label>No. Transaksi</label>
+                        <input type="text" class="form-control" value="<?= esc($transaksi['no_transaksi']) ?>" readonly>
                     </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <label class="font-weight-bold">Waktu (Dibuat)</label>
-                        <input type="text" class="form-control text-muted" value="<?= date('H:i:s', strtotime($transaksi['created_at'] ?? 'now')) ?>" readonly style="cursor: not-allowed;">
-                    </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <label class="font-weight-bold">Tanggal <span class="text-danger">*</span></label>
+                    <div class="col-md-4">
+                        <label>Tanggal <span class="text-danger">*</span></label>
                         <input type="date" class="form-control" name="tanggal" value="<?= $transaksi['tanggal'] ?>" required>
                     </div>
-                    <div class="col-md-3">
-                        <label class="font-weight-bold">Deskripsi <span class="text-danger">*</span></label>
+                    <div class="col-md-4">
+                        <label>Deskripsi <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="deskripsi" rows="1" required><?= esc($transaksi['deskripsi']) ?></textarea>
                     </div>
                 </div>
@@ -46,7 +41,7 @@
 
                 <div class="table-responsive">
                     <table class="table table-bordered" id="tabelRincian">
-                        <thead class="bg-primary text-white">
+                        <thead class="bg-light">
                             <tr>
                                 <th width="25%">Kode Akun</th>
                                 <th width="20%">Debit</th>
@@ -79,7 +74,7 @@
                                 <td>
                                     <select class="form-control" name="status[]" required>
                                         <?php 
-                                        $statuses = ['Penerimaan', 'Pengeluaran', 'Investasi Masuk', 'Investasi Keluar', 'Pendanaan Masuk', 'Pendanaan Keluar'];
+                                        $statuses = ['Penerimaan', 'Pengeluaran', 'Investasi Masuk', 'Investasi Keluar', 'Pendanaan Masuk', 'Pendanaan Keluar', 'Normal'];
                                         foreach($statuses as $s): ?>
                                             <option value="<?= $s ?>" <?= $d['status'] == $s ? 'selected' : '' ?>><?= $s ?></option>
                                         <?php endforeach; ?>
@@ -93,9 +88,9 @@
                         </tbody>
                         <tfoot>
                             <tr class="bg-light font-weight-bold">
-                                <td class="text-end">JUMLAH (NILAI)</td>
-                                <td class="text-end text-primary" id="totalDebit">Rp 0</td>
-                                <td class="text-end text-primary" id="totalKredit">Rp 0</td>
+                                <td class="text-end">TOTAL</td>
+                                <td class="text-end" id="totalDebit">Rp 0</td>
+                                <td class="text-end" id="totalKredit">Rp 0</td>
                                 <td colspan="2" class="text-center" id="statusBalance">
                                     <span class="badge badge-danger">Belum Seimbang</span>
                                 </td>
@@ -119,6 +114,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tbody = document.querySelector('#tabelRincian tbody');
     const btnAddBaris = document.getElementById('btnAddBaris');
+    const btnSimpan = document.getElementById('btnSimpan');
 
     const akunOptions = `
         <option value="">-- Pilih Akun --</option>
@@ -135,10 +131,11 @@ document.addEventListener('DOMContentLoaded', function() {
         <option value="Investasi Keluar">Investasi Keluar</option>
         <option value="Pendanaan Masuk">Pendanaan Masuk</option>
         <option value="Pendanaan Keluar">Pendanaan Keluar</option>
+        <option value="Normal">Normal</option>
     `;
 
     function formatRupiah(angka) {
-        let number_string = angka.toString().replace(/[^,\d]/g, ''),
+        let number_string = angka.replace(/[^,\d]/g, '').toString(),
             split = number_string.split(','),
             sisa = split[0].length % 3,
             rupiah = split[0].substr(0, sisa),
@@ -153,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function parseRupiah(rupiahString) {
         if (!rupiahString) return 0;
-        let cleanString = rupiahString.toString().replace(/\./g, '').replace(/Rp\s?/g, '').replace(/,/g, '.');
+        let cleanString = rupiahString.replace(/\./g, '').replace(/Rp\s?/g, '').replace(/,/g, '.');
         let val = parseFloat(cleanString);
         return isNaN(val) ? 0 : val;
     }
@@ -170,14 +167,16 @@ document.addEventListener('DOMContentLoaded', function() {
             totalKredit += parseRupiah(input.value);
         });
 
-        document.getElementById('totalDebit').innerText = 'Rp ' + formatRupiah(totalDebit);
-        document.getElementById('totalKredit').innerText = 'Rp ' + formatRupiah(totalKredit);
+        document.getElementById('totalDebit').innerText = 'Rp ' + formatRupiah(totalDebit.toString());
+        document.getElementById('totalKredit').innerText = 'Rp ' + formatRupiah(totalKredit.toString());
 
         const statusBalance = document.getElementById('statusBalance');
         if (totalDebit > 0 && totalKredit > 0 && totalDebit === totalKredit) {
             statusBalance.innerHTML = '<span class="badge badge-success px-3 py-2">Seimbang (Balance)</span>';
+            btnSimpan.disabled = false;
         } else {
             statusBalance.innerHTML = '<span class="badge badge-danger px-3 py-2">Belum Seimbang</span>';
+            btnSimpan.disabled = true;
         }
     }
 
@@ -212,13 +211,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Pasang event ke baris yang sudah ada dari database
     Array.from(tbody.rows).forEach(row => attachEvents(row));
     
-    // Hitung total pertama kali halaman dimuat
     hitungTotal(); 
 
-    // Event Tambah Baris
     btnAddBaris.addEventListener('click', function() {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -232,25 +228,13 @@ document.addEventListener('DOMContentLoaded', function() {
         attachEvents(tr);
     });
 
-    // Validasi Submit (Pencegah error/tidak balance)
     document.getElementById('formTransaksi').addEventListener('submit', function(e) {
-        let totalDebitSubmit = 0;
-        let totalKreditSubmit = 0;
-
-        document.querySelectorAll('.debit-input').forEach(input => {
-            totalDebitSubmit += parseRupiah(input.value);
-        });
-
-        document.querySelectorAll('.kredit-input').forEach(input => {
-            totalKreditSubmit += parseRupiah(input.value);
-        });
+        const totalDebit = parseRupiah(document.getElementById('totalDebit').innerText);
+        const totalKredit = parseRupiah(document.getElementById('totalKredit').innerText);
         
-        if (totalDebitSubmit === 0 && totalKreditSubmit === 0) {
+        if (totalDebit !== totalKredit || totalDebit === 0) {
             e.preventDefault();
-            alert('Gagal: Nominal transaksi masih kosong!');
-        } else if (totalDebitSubmit !== totalKreditSubmit) {
-            e.preventDefault();
-            alert('Gagal: Transaksi belum seimbang!');
+            alert('Transaksi tidak seimbang atau masih kosong!');
         }
     });
 });
