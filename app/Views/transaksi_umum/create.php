@@ -76,6 +76,7 @@ Tambah Transaksi
                                     <option value="Investasi Keluar">Investasi Keluar</option>
                                     <option value="Pendanaan Masuk">Pendanaan Masuk</option>
                                     <option value="Pendanaan Keluar">Pendanaan Keluar</option>
+                                    <option value="Normal">Normal</option>
                                 </select>
                             </td>
                             <td class="text-center">
