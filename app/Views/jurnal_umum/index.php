@@ -7,9 +7,30 @@ Jurnal Umum
 <?= $this->section('content') ?>
 <div class="d-flex justify-content-between align-items-center mb-4 pt-3">
     <h3 class="fw-bold text-dark mb-0">Jurnal Umum</h3>
-    <a href="/jurnal-umum/cetak-pdf" class="btn btn-danger shadow-sm" target="_blank">
-        <i class="bi bi-file-pdf me-1"></i> Cetak PDF
-    </a>
+
+</div>
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form action="/jurnal-umum" method="GET" class="row align-items-end">
+            <div class="col-md-4">
+                <label for="tgl_awal">Tanggal Awal</label>
+                <input type="date" class="form-control" name="tgl_awal" id="tgl_awal" value="<?= $tgl_awal ?? '' ?>">
+            </div>
+            <div class="col-md-4">
+                <label for="tgl_akhir">Tanggal Akhir</label>
+                <input type="date" class="form-control" name="tgl_akhir" id="tgl_akhir" value="<?= $tgl_akhir ?? '' ?>">
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary shadow-sm flex-grow-1">
+                    <i class="bi bi-funnel me-1"></i> Tampilkan
+                </button>
+                <a href="/jurnal-umum" class="btn btn-secondary flex-grow-1"><i class="fas fa-sync"></i> Reset</a>
+                <a href="/jurnal-umum/cetak-pdf?tgl_awal=<?= $tgl_awal ?? '' ?>&tgl_akhir=<?= $tgl_akhir ?? '' ?>" class="btn btn-danger flex-grow-1" target="_blank">
+                    <i class="bi bi-file-pdf me-1"></i> Cetak PDF
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <?php if(session()->getFlashdata('success')): ?>
@@ -34,7 +55,6 @@ Jurnal Umum
                 </thead>
                 <tbody>
                     <?php 
-                        if (!empty($groupedData)): 
                             foreach ($groupedData as $transaction): 
                     ?>
                         <?php 
@@ -89,14 +109,7 @@ Jurnal Umum
                             <?php $firstRow = false; ?>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">
-                                <i class="bi bi-inbox fs-1"></i>
-                                <p class="mt-2">Tidak ada data jurnal umum</p>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
+
                 </tbody>
                 <tfoot>
                     <tr class="table-light" style="border-top: 2px solid #0d6efd; border-bottom: 2px solid #0d6efd; font-weight: bold;">
@@ -148,3 +161,52 @@ Jurnal Umum
     }
 </style>
 <?= $this->endSection() ?>
+
+<?= $this->section('scripts'); ?>
+<script>
+    $(document).ready(function(){
+        $('#tabelJurnalUmum').DataTable({
+            "searching": false,
+            "language": {
+                "emptyTable": "Tidak ada data transaksi penyesuaian pada tanggal tersebut",
+                "zeroRecords": "Data tidak ditemukan",
+                "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                "infoEmpty": "Showing 0 to 0 of 0 entries",
+                "paginate": {
+                    "first": "Pertama",
+                    "last": "Terakhir",
+                    "next": "Selanjutnya",
+                    "previous": "Sebelumnya"
+                }
+            }
+        });
+
+
+        $(".dataTables_empty").css({
+            "text-align": "center",
+            "padding": "40px 0"
+        });
+
+        $(".dataTables_empty").css({
+            "text-align": "center",
+            "padding": "40px 0"
+        });
+
+        $(".dataTables_info").css({
+            "margin-top": "15px",
+            "padding": "10px 0"
+        });
+
+        $(".dataTables_paginate").css({
+            "margin-top": "15px",
+            "padding": "10px 0"
+        });
+
+        $(".dataTables_length").css({
+            "margin-bottom": "15px",
+            "padding": "10px 0"
+        });
+    })
+
+</script>
+<?= $this->endSection(); ?>
