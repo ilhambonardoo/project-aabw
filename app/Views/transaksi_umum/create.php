@@ -19,7 +19,7 @@ Tambah Transaksi
             <div class="row mb-4">
                 <div class="col-md-4 mb-3">
                     <label for="no_transaksi" class="form-label fw-semibold">Nomor Transaksi</label>
-                    <input type="text" class="form-control bg-light" id="no_transaksi" name="no_transaksi" value="<?= $no_transaksi ?>" readonly>
+                    <input type="text" class="form-control bg-light" id="no_transaksi" name="no_transaksi" value="TRXU-<?= $tanggal_sekarang ?>-<?= $no_urut_sekarang ?>" readonly>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="tanggal" class="form-label fw-semibold">Tanggal</label>
