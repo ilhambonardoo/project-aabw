@@ -6,7 +6,7 @@ Akun 1 (Klasifikasi)
 
 <?= $this->section('content') ?>
 <div class="d-flex justify-content-between align-items-center mb-4 pt-3">
-    <h3 class="fw-bold text-dark mb-0">Master Akun 1 (Klasifikasi)</h3>
+    <h3 class="fw-bold text-dark mb-0">Data Akun 1</h3>
     <a href="/akun1/create" class="btn btn-success shadow-sm">
         <i class="bi bi-plus-lg me-1"></i> Tambah Klasifikasi
     </a>
@@ -25,7 +25,7 @@ Akun 1 (Klasifikasi)
             <thead class="table-success" style="border-bottom: 2px solid #198754;">
                 <tr>
                     <th class="px-4 py-3" style="width: 20%;">Kode Akun 1</th>
-                    <th class="py-3">Nama Klasifikasi (Akun 1)</th>
+                    <th class="py-3">Akun 1</th>
                     <th class="px-4 py-3 text-center" style="width: 15%;">Aksi</th>
                 </tr>
             </thead>

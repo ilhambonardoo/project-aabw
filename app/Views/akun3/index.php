@@ -6,7 +6,7 @@ Akun 3 (Detail)
 
 <?= $this->section('content') ?>
 <div class="d-flex justify-content-between align-items-center mb-4 pt-3">
-    <h3 class="fw-bold text-dark mb-0">Master Akun 3 (Detail)</h3>
+    <h3 class="fw-bold text-dark mb-0">Data Akun 3</h3>
     <a href="/akun3/create" class="btn btn-success shadow-sm">
         <i class="bi bi-plus-lg me-1"></i> Tambah Akun Detail
     </a>
@@ -25,9 +25,10 @@ Akun 3 (Detail)
             <table class="table table-hover table-striped mb-0">
                 <thead class="table-success" style="border-bottom: 2px solid #198754;">
                     <tr>
-                        <th class="px-4 py-3">Kode Akun</th>
-                        <th class="py-3">Nama Akun (Akun 3)</th>
-                        <th class="py-3">Golongan (Akun 2)</th>
+                        <th class="px-4 py-3">Kode Akun 3</th>
+                        <th class="py-3">Akun 1</th>
+                        <th class="py-3">Akun 2</th>
+                        <th class="py-3">Akun 3</th>
                         <th class="py-3">Saldo Normal</th>
                         <th class="px-4 py-3 text-center">Aksi</th>
                     </tr>
@@ -44,11 +45,11 @@ Akun 3 (Detail)
                         <?php foreach ($akun3 as $row) : ?>
                             <tr>
                                 <td class="px-4 py-3 align-middle fw-bold text-success"><?= esc($row['kode_akun_3']) ?></td>
-                                <td class="py-3 align-middle text-dark fw-semibold"><?= esc($row['nama_akun_3']) ?></td>
+                                <td class="py-3 align-middle text-muted"><?= esc($row['nama_akun_1']); ?></td>
                                 <td class="py-3 align-middle text-muted">
-                                    <small><?= esc($row['nama_akun_1']) ?> &raquo;</small><br>
                                     <?= esc($row['nama_akun_2']) ?>
                                 </td>
+                                <td class="py-3 align-middle text-dark fw-semibold"><?= esc($row['nama_akun_3']) ?></td>
                                 <td class="py-3 align-middle">
                                     <span class="badge <?= $row['saldo_normal'] == 'Debit' ? 'bg-info text-dark' : 'bg-warning text-dark' ?> bg-opacity-25 border">
                                         <?= esc($row['saldo_normal']) ?>
