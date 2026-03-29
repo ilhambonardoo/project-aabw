@@ -50,13 +50,22 @@ class TransaksiPenyesuaianController extends BaseController
 
     public function create(){
         $tanggal_sekarang = date('Ymd');
-        $random_number = rand('100', '999');
-        $no_transaksi = 'TRXP-'. $tanggal_sekarang . '-' . $random_number;
+        
+        $db = \Config\Database::connect();
+        $lastTransaksi = $db->table('transaksi')
+            ->selectCount('id', 'count')
+            ->like('no_transaksi', 'TRXP-' . $tanggal_sekarang, 'after')
+            ->get()
+            ->getRow();
+        
+        $noUrut = ($lastTransaksi->count + 1);
+        $noUrutFormat = str_pad($noUrut, 3, '0', STR_PAD_LEFT);
 
         $data = [
-            'title'        => 'Tambah Transaksi Penyesuaian',
-            'no_transaksi' => $no_transaksi,
-            'akun3'        => $this->akun3Model->findAll(),
+            'title'              => 'Tambah Transaksi Penyesuaian',
+            'tanggal_sekarang'   => $tanggal_sekarang,
+            'no_urut_sekarang'   => $noUrutFormat,
+            'akun3'              => $this->akun3Model->findAll(),
         ];
 
         return view('transaksi_penyesuaian/create', $data);
