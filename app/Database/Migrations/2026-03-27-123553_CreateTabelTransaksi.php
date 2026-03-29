@@ -82,7 +82,8 @@ class CreateTabelTransaksi extends Migration
                     'Investasi Masuk', 
                     'Investasi Keluar', 
                     'Pendanaan Masuk', 
-                    'Pendanaan Keluar'
+                    'Pendanaan Keluar',
+                    'Normal',
                 ],
             ],
         ]);
