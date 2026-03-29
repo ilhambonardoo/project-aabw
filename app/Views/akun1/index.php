@@ -43,6 +43,9 @@ Akun 1 (Klasifikasi)
                             <td class="px-4 py-3 align-middle fw-bold text-success"><?= esc($row['kode_akun_1']) ?></td>
                             <td class="py-3 align-middle text-dark fw-semibold"><?= esc($row['nama_akun_1']) ?></td>
                             <td class="px-4 py-3 text-center align-middle">
+                                <a href="/akun1/edit/<?= $row['id'] ?>" class="btn btn-sm btn-outline-primary" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
                                 <a href="/akun1/delete/<?= $row['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus data ini? Semua data Akun 2 dan 3 yang terhubung juga akan ikut terhapus!');" title="Hapus">
                                     <i class="bi bi-trash"></i>
                                 </a>

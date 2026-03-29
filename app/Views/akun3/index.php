@@ -56,6 +56,9 @@ Akun 3 (Detail)
                                     </span>
                                 </td>
                                 <td class="px-4 py-3 text-center align-middle">
+                                    <a href="/akun3/edit/<?= $row['id'] ?>" class="btn btn-sm btn-outline-primary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
                                     <a href="/akun3/delete/<?= $row['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus data akun ini?');" title="Hapus">
                                         <i class="bi bi-trash"></i>
                                     </a>
