@@ -55,3 +55,8 @@ $routes->get('/transaksi-penyesuaian/edit/(:num)', 'TransaksiPenyesuaianControll
 $routes->post('/transaksi-penyesuaian/update/(:num)', 'TransaksiPenyesuaianController::update/$1');
 $routes->get('/transaksi-penyesuaian/detail/(:num)', 'TransaksiPenyesuaianController::detail/$1');
 $routes->get('/transaksi-penyesuaian/delete/(:num)', 'TransaksiPenyesuaianController::delete/$1');
+
+// Routes untuk Jurnal Umum
+$routes->get('/jurnal-umum', 'JurnalUmumController::index');
+$routes->get('/jurnal-umum/cetak-pdf', 'JurnalUmumController::cetakPdf');
+
