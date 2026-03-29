@@ -81,6 +81,7 @@ Edit Transaksi
                                     <option value="Investasi Keluar" <?= ($d['status'] == 'Investasi Keluar') ? 'selected' : '' ?>>Investasi Keluar</option>
                                     <option value="Pendanaan Masuk" <?= ($d['status'] == 'Pendanaan Masuk') ? 'selected' : '' ?>>Pendanaan Masuk</option>
                                     <option value="Pendanaan Keluar" <?= ($d['status'] == 'Pendanaan Keluar') ? 'selected' : '' ?>>Pendanaan Keluar</option>
+                                    <option value="Normal" <?= ($d['status'] == 'Normal') ? 'selected' : '' ?>>Normal</option>
                                 </select>
                             </td>
                             <td class="text-center">
