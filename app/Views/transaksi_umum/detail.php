@@ -45,6 +45,12 @@ Detail Transaksi
                 </thead>
                 <tbody>
                     <?php 
+                    if (is_array($detail) && count($detail) > 0) {
+                        usort($detail, function($a, $b) {
+                            return $b['debit'] <=> $a['debit'];
+                        });
+                    }
+
                     $no = 1; 
                     $total_debit = 0;
                     $total_kredit = 0;
@@ -54,7 +60,13 @@ Detail Transaksi
                     ?>
                     <tr>
                         <td class="text-center"><?= $no++ ?></td>
-                        <td><?= $d['kode_akun_3'] ?> - <?= $d['nama_akun_3'] ?></td>
+                        <td>
+                            <?php if($d['kredit'] > 0): ?>
+                                <span style="margin-left: 20px;"><?= $d['kode_akun_3'] ?> - <?= $d['nama_akun_3'] ?></span>
+                            <?php else: ?>
+                                <?= $d['kode_akun_3'] ?> - <?= $d['nama_akun_3'] ?>
+                            <?php endif; ?>
+                        </td>
                         <td class="text-end"><?= number_format($d['debit'], 2, ',', '.') ?></td>
                         <td class="text-end"><?= number_format($d['kredit'], 2, ',', '.') ?></td>
                         <td class="text-center">
