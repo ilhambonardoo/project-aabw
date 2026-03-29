@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/main') ?>
 
+<?= $this->section('title'); ?>
+Detail Transaksi Penyesuaian
+<?= $this->endSection(); ?>
+
 <?= $this->section('content') ?>
 <div class="container-fluid">
     <div class="d-flex align-items-center mb-4">
