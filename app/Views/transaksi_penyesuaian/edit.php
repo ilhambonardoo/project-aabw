@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/main') ?>
 
+<?= $this->section('title'); ?>
+Edit Transaksi Penyesuaian
+<?= $this->endSection(); ?>
+
 <?= $this->section('content') ?>
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -81,7 +85,7 @@
                                     </select>
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-danger btn-sm btn-hapus"><i class="fas fa-trash"></i></button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-hapus"><i class="fas fa-trash"></i>X</button>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -222,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <td><input type="text" class="form-control text-end debit-input format-rupiah" name="debit[]" value="0" required></td>
             <td><input type="text" class="form-control text-end kredit-input format-rupiah" name="kredit[]" value="0" required></td>
             <td><select class="form-control" name="status[]" required>${statusOptions}</select></td>
-            <td class="text-center"><button type="button" class="btn btn-danger btn-sm btn-hapus"><i class="fas fa-trash"></i></button></td>
+            <td class="text-center"><button type="button" class="btn btn-danger btn-sm btn-hapus"><i class="fas fa-trash"></i>X</button></td>
         `;
         tbody.appendChild(tr);
         attachEvents(tr);
