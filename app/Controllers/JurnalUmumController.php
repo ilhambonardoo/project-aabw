@@ -23,15 +23,22 @@ class JurnalUmumController extends BaseController
 
     public function index()
     {
+        $tgl_awal = $this->request->getGet('tgl_awal');
+        $tgl_akhir = $this->request->getGet('tgl_akhir');
         $db = \Config\Database::connect();
         $builder = $db->table('transaksi t');
         
-        $jurnalUmum = $builder
-            ->select('t.id, t.no_transaksi, t.tanggal, t.deskripsi, dt.id_akun_3, dt.debit, dt.kredit, a3.kode_akun_3, a3.nama_akun_3')
+        $builder->select('t.id, t.no_transaksi, t.tanggal, t.deskripsi, dt.id_akun_3, dt.debit, dt.kredit, a3.kode_akun_3, a3.nama_akun_3')
             ->join('detail_transaksi dt', 'dt.id_transaksi = t.id', 'left')
             ->join('akun_3 a3', 'a3.id = dt.id_akun_3', 'left')
-            ->where('t.jenis_transaksi', 'Umum')
-            ->orderBy('t.tanggal', 'ASC')
+            ->where('t.jenis_transaksi', 'Umum');
+
+        if($tgl_awal && $tgl_akhir){
+            $builder->where('t.tanggal >=', $tgl_awal)
+                    ->where('t.tanggal <=', $tgl_akhir);
+        }
+
+        $jurnalUmum = $builder->orderBy('t.tanggal', 'ASC')
             ->orderBy('t.no_transaksi', 'ASC')
             ->get()
             ->getResultArray();
@@ -83,24 +90,41 @@ class JurnalUmumController extends BaseController
             });
         }
 
+        if($tgl_awal && $tgl_akhir){
+            $this->transaksiModel->where('jenis_transaksi', 'umum')->where('tanggal >=', $tgl_awal)->where('tanggal <=', $tgl_akhir)->orderBy('tanggal', 'DESC')->findAll();
+        } else {
+            $this->transaksiModel->where('jenis_transaksi', 'umum')->orderBy('tanggal', 'DESC')->findAll();
+        }
+
+
         $data['groupedData'] = $groupedData;
         $data['totalDebit'] = $totalDebit;
         $data['totalKredit'] = $totalKredit;
+        $data['tgl_awal'] = $tgl_awal;
+        $data['tgl_akhir'] = $tgl_akhir;
 
         return view('jurnal_umum/index', $data);
     }
 
     public function cetakPdf()
     {
+        $tgl_awal = $this->request->getGet('tgl_awal');
+        $tgl_akhir = $this->request->getGet('tgl_akhir');
+
         $db = \Config\Database::connect();
         $builder = $db->table('transaksi t');
         
-        $jurnalUmum = $builder
-            ->select('t.id, t.no_transaksi, t.tanggal, t.deskripsi, dt.id_akun_3, dt.debit, dt.kredit, a3.kode_akun_3, a3.nama_akun_3')
+        $builder->select('t.id, t.no_transaksi, t.tanggal, t.deskripsi, dt.id_akun_3, dt.debit, dt.kredit, a3.kode_akun_3, a3.nama_akun_3')
             ->join('detail_transaksi dt', 'dt.id_transaksi = t.id', 'left')
             ->join('akun_3 a3', 'a3.id = dt.id_akun_3', 'left')
-            ->where('t.jenis_transaksi', 'Umum')
-            ->orderBy('t.tanggal', 'ASC')
+            ->where('t.jenis_transaksi', 'Umum');
+
+        if($tgl_awal && $tgl_akhir){
+            $builder->where('t.tanggal >=', $tgl_awal)
+                    ->where('t.tanggal <=', $tgl_akhir);
+        }
+
+        $jurnalUmum = $builder->orderBy('t.tanggal', 'ASC')
             ->orderBy('t.no_transaksi', 'ASC')
             ->get()
             ->getResultArray();
