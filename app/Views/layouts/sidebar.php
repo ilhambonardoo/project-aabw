@@ -97,15 +97,19 @@
                 </div>
             </li>
 
+            <?php 
+            $jurnalUmumActive = strpos($currentUri, 'jurnal-umum') !== false;
+            $bukuBesarActive = strpos($currentUri, 'buku-besar') !== false;
+            ?>
             <li class="nav-item">
-                <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
+                <a href="/jurnal-umum" class="nav-link <?php echo $jurnalUmumActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-journal-text"></i>
                     <span>Jurnal Umum</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
+                <a href="/buku-besar" class="nav-link <?php echo $bukuBesarActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
                     <i class="bi bi-book"></i>
                     <span>Buku Besar</span>
                 </a>
