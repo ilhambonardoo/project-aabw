@@ -113,9 +113,39 @@ Transaksi Umum
 
     $(document).ready(function() {
         $('#tabelTransaksi').DataTable({
-            "searching": false, 
-            "lengthMenu": [10, 25, 50, 100],
-            "pageLength": 10 
+            "searching": false,
+            "language": {
+                "emptyTable": "Tidak ada data transaksi penyesuaian pada tanggal tersebut",
+                "zeroRecords": "Data tidak ditemukan",
+                "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                "infoEmpty": "Showing 0 to 0 of 0 entries",
+                "paginate": {
+                    "first": "Pertama",
+                    "last": "Terakhir",
+                    "next": "Selanjutnya",
+                    "previous": "Sebelumnya"
+                }
+            }
+        });
+
+        $(".dataTables_empty").css({
+            "text-align": "center",
+            "padding": "40px 0"
+        });
+
+        $(".dataTables_info").css({
+            "margin-top": "15px",
+            "padding": "10px 0"
+        });
+
+        $(".dataTables_paginate").css({
+            "margin-top": "15px",
+            "padding": "10px 0"
+        });
+
+        $(".dataTables_length").css({
+            "margin-bottom": "15px",
+            "padding": "10px 0"
         });
     });
 </script>
