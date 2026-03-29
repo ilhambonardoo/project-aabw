@@ -58,7 +58,7 @@
                             <td><?= esc($d['nama_akun_3']) ?></td>
                             <td class="text-right">Rp <?= number_format($d['debit'], 0, ',', '.') ?></td>
                             <td class="text-right">Rp <?= number_format($d['kredit'], 0, ',', '.') ?></td>
-                            <td><span class="badge badge-secondary text-dark"><?= esc($d['status']) ?></span></td>
+                            <td><span class="badge badge-secondary text-dark h5"><?= esc($d['status']) ?></span></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
