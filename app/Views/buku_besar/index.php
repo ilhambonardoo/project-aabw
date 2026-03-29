@@ -33,6 +33,7 @@ Buku Besar
                 <button type="submit" class="btn btn-primary shadow-sm flex-grow-1">
                     <i class="bi bi-funnel me-1"></i> Tampilkan
                 </button>
+                <a href="/buku-besar" class="btn btn-secondary flex-grow-1"><i class="fas fa-sync"></i> Reset</a>
                 <a href="/buku-besar/cetak-pdf?tanggal_awal=<?= esc($tanggalAwal) ?>&tanggal_akhir=<?= esc($tanggalAkhir) ?>" 
                    class="btn btn-danger shadow-sm flex-grow-1" target="_blank">
                     <i class="bi bi-file-pdf me-1"></i> Cetak PDF
@@ -60,7 +61,7 @@ Buku Besar
                             <thead class="table-primary">
                                 <tr>
                                     <th class="py-2">Tanggal</th>
-                                    <th class="py-2">Keterangan</th>
+                                    <th class="py-2">Nomor Transaksi</th>
                                     <th class="py-2 text-center">Debit</th>
                                     <th class="py-2 text-center">Kredit</th>
                                     <th class="py-2 text-center">Saldo</th>
