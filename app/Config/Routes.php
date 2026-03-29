@@ -21,16 +21,22 @@ $routes->get('dashboard', 'Dashboard::index');
 $routes->get('/akun1', "Akun1Controller::index");
 $routes->get('/akun1/create', "Akun1Controller::create");
 $routes->post('/akun1/store', "Akun1Controller::store");
+$routes->get('/akun1/edit/(:num)', "Akun1Controller::edit/$1");
+$routes->post('/akun1/update/(:num)', "Akun1Controller::update/$1");
 $routes->get('/akun1/delete/(:num)', 'Akun1Controller::delete/$1');
 
 $routes->get('/akun2', "Akun2Controller::index");
 $routes->get('/akun2/create', "Akun2Controller::create");
 $routes->post('/akun2/store', "Akun2Controller::store");
+$routes->get('/akun2/edit/(:num)', "Akun2Controller::edit/$1");
+$routes->post('/akun2/update/(:num)', "Akun2Controller::update/$1");
 $routes->get('/akun2/delete/(:num)', 'Akun2Controller::delete/$1');
 
 $routes->get('/akun3', "Akun3Controller::index");
 $routes->get('/akun3/create', "Akun3Controller::create");
 $routes->post('/akun3/store', "Akun3Controller::store");
+$routes->get('/akun3/edit/(:num)', "Akun3Controller::edit/$1");
+$routes->post('/akun3/update/(:num)', "Akun3Controller::update/$1");
 $routes->get('/akun3/delete/(:num)', 'Akun3Controller::delete/$1');
 
 
