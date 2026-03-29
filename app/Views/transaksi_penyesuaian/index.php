@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/main') ?>
 
+<?= $this->section('title'); ?>
+Transaksi Penyesuaian
+<?= $this->endSection(); ?>
+
 <?= $this->section('content') ?>
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -92,6 +96,12 @@
                     "previous": "Sebelumnya"
                 }
             }
+        });
+
+
+        $(".dataTables_empty").css({
+            "text-align": "center",
+            "padding": "40px 0"
         });
 
         $('.btn-delete').on('click', function() {
