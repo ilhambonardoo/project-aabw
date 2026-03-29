@@ -12,31 +12,59 @@ Tambah Akun 2
     </a>
 </div>
 
+<?php if (session()->has('errors')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong><i class="bi bi-exclamation-circle me-2"></i>Validasi Gagal</strong>
+        <ul class="mb-0 mt-2">
+            <?php foreach (session('errors') as $error): ?>
+                <li><?= esc($error) ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
 <div class="card shadow-sm border-0 rounded-3" style="max-width: 600px;">
     <div class="card-body p-4">
         <form action="/akun2/store" method="POST">
+            <?= csrf_field() ?>
             
             <div class="mb-3">
                 <label for="id_akun_1" class="form-label fw-semibold">Pilih Induk Klasifikasi (Akun 1)</label>
-                <select class="form-select" id="id_akun_1" name="id_akun_1" required>
+                <select class="form-select <?= session('errors.id_akun_1') ? 'is-invalid' : '' ?>" id="id_akun_1" name="id_akun_1" required>
                     <option value="" selected disabled>-- Pilih Akun 1 --</option>
                     <?php foreach($akun1 as $row): ?>
-                        <option value="<?= $row['id'] ?>">
-                            <?= $row['kode_akun_1'] ?> - <?= $row['nama_akun_1'] ?>
+                        <option value="<?= esc($row['id']) ?>" <?= old('id_akun_1') == $row['id'] ? 'selected' : '' ?>>
+                            <?= esc($row['kode_akun_1']) ?> - <?= esc($row['nama_akun_1']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <?php if (session('errors.id_akun_1')): ?>
+                    <div class="invalid-feedback d-block">
+                        <?= session('errors.id_akun_1') ?>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div class="mb-3">
                 <label for="kode_akun_2" class="form-label fw-semibold">Kode Akun 2</label>
-                <input type="number" class="form-control" id="kode_akun_2" name="kode_akun_2" placeholder="Contoh: 11" required>
+                <input type="number" class="form-control <?= session('errors.kode_akun_2') ? 'is-invalid' : '' ?>" id="kode_akun_2" name="kode_akun_2" placeholder="Contoh: 11" value="<?= old('kode_akun_2') ?>" required>
                 <small class="text-muted">Gunakan dua digit berawalan kode Akun 1 (misal: 11, 12, 21, 41)</small>
+                <?php if (session('errors.kode_akun_2')): ?>
+                    <div class="invalid-feedback d-block">
+                        <?= session('errors.kode_akun_2') ?>
+                    </div>
+                <?php endif; ?>
             </div>
             
             <div class="mb-4">
                 <label for="nama_akun_2" class="form-label fw-semibold">Nama Golongan</label>
-                <input type="text" class="form-control" id="nama_akun_2" name="nama_akun_2" placeholder="Contoh: Aset Lancar" required>
+                <input type="text" class="form-control <?= session('errors.nama_akun_2') ? 'is-invalid' : '' ?>" id="nama_akun_2" name="nama_akun_2" placeholder="Contoh: Aset Lancar" value="<?= old('nama_akun_2') ?>" required>
+                <?php if (session('errors.nama_akun_2')): ?>
+                    <div class="invalid-feedback d-block">
+                        <?= session('errors.nama_akun_2') ?>
+                    </div>
+                <?php endif; ?>
             </div>
             
             <button type="submit" class="btn btn-success w-100">
