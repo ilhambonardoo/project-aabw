@@ -1,12 +1,12 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('title') ?>
-Tambah Akun 1
+Edit Akun 1
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="d-flex justify-content-between align-items-center mb-4 pt-3">
-    <h3 class="fw-bold text-dark mb-0">Tambah Akun 1</h3>
+    <h3 class="fw-bold text-dark mb-0">Edit Akun 1</h3>
     <a href="/akun1" class="btn btn-secondary shadow-sm">
         <i class="bi bi-arrow-left me-1"></i> Kembali
     </a>
@@ -26,12 +26,12 @@ Tambah Akun 1
 
 <div class="card shadow-sm border-0 rounded-3" style="max-width: 600px;">
     <div class="card-body p-4">
-        <form action="/akun1/store" method="POST">
+        <form action="/akun1/update/<?= esc($akun1['id']) ?>" method="POST">
             <?= csrf_field() ?>
             
             <div class="mb-3">
                 <label for="kode_akun_1" class="form-label fw-semibold">Kode Akun 1</label>
-                <input type="number" class="form-control <?= session('errors.kode_akun_1') ? 'is-invalid' : '' ?>" id="kode_akun_1" name="kode_akun_1" placeholder="Contoh: 1" value="<?= old('kode_akun_1') ?>" required autofocus>
+                <input type="number" class="form-control <?= session('errors.kode_akun_1') ? 'is-invalid' : '' ?>" id="kode_akun_1" name="kode_akun_1" placeholder="Contoh: 1" value="<?= old('kode_akun_1', $akun1['kode_akun_1']) ?>" required autofocus>
                 <small class="text-muted">Gunakan angka tunggal (1, 2, 3, 4, 5)</small>
                 <?php if (session('errors.kode_akun_1')): ?>
                     <div class="invalid-feedback d-block">
@@ -42,7 +42,7 @@ Tambah Akun 1
             
             <div class="mb-4">
                 <label for="nama_akun_1" class="form-label fw-semibold">Nama Klasifikasi</label>
-                <input type="text" class="form-control <?= session('errors.nama_akun_1') ? 'is-invalid' : '' ?>" id="nama_akun_1" name="nama_akun_1" placeholder="Contoh: Aset" value="<?= old('nama_akun_1') ?>" required>
+                <input type="text" class="form-control <?= session('errors.nama_akun_1') ? 'is-invalid' : '' ?>" id="nama_akun_1" name="nama_akun_1" placeholder="Contoh: Aset" value="<?= old('nama_akun_1', $akun1['nama_akun_1']) ?>" required>
                 <?php if (session('errors.nama_akun_1')): ?>
                     <div class="invalid-feedback d-block">
                         <?= session('errors.nama_akun_1') ?>
@@ -50,9 +50,14 @@ Tambah Akun 1
                 <?php endif; ?>
             </div>
             
-            <button type="submit" class="btn btn-success w-100">
-                <i class="bi bi-save me-1"></i> Simpan Data
-            </button>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success flex-grow-1">
+                    <i class="bi bi-save me-1"></i> Simpan Perubahan
+                </button>
+                <a href="/akun1" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i> Batal
+                </a>
+            </div>
         </form>
     </div>
 </div>

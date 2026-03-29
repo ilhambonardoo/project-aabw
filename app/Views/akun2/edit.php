@@ -1,12 +1,12 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('title') ?>
-Tambah Akun 2
+Edit Akun 2
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="d-flex justify-content-between align-items-center mb-4 pt-3">
-    <h3 class="fw-bold text-dark mb-0">Tambah Akun 2</h3>
+    <h3 class="fw-bold text-dark mb-0">Edit Akun 2</h3>
     <a href="/akun2" class="btn btn-secondary shadow-sm">
         <i class="bi bi-arrow-left me-1"></i> Kembali
     </a>
@@ -26,15 +26,15 @@ Tambah Akun 2
 
 <div class="card shadow-sm border-0 rounded-3" style="max-width: 600px;">
     <div class="card-body p-4">
-        <form action="/akun2/store" method="POST">
+        <form action="/akun2/update/<?= esc($akun2['id']) ?>" method="POST">
             <?= csrf_field() ?>
             
             <div class="mb-3">
                 <label for="id_akun_1" class="form-label fw-semibold">Pilih Induk Klasifikasi (Akun 1)</label>
                 <select class="form-select <?= session('errors.id_akun_1') ? 'is-invalid' : '' ?>" id="id_akun_1" name="id_akun_1" required>
-                    <option value="" selected disabled>-- Pilih Akun 1 --</option>
+                    <option value="" disabled>-- Pilih Akun 1 --</option>
                     <?php foreach($akun1 as $row): ?>
-                        <option value="<?= esc($row['id']) ?>" <?= old('id_akun_1') == $row['id'] ? 'selected' : '' ?>>
+                        <option value="<?= esc($row['id']) ?>" <?= old('id_akun_1', $akun2['id_akun_1']) == $row['id'] ? 'selected' : '' ?>>
                             <?= esc($row['kode_akun_1']) ?> - <?= esc($row['nama_akun_1']) ?>
                         </option>
                     <?php endforeach; ?>
@@ -48,7 +48,7 @@ Tambah Akun 2
 
             <div class="mb-3">
                 <label for="kode_akun_2" class="form-label fw-semibold">Kode Akun 2</label>
-                <input type="number" class="form-control <?= session('errors.kode_akun_2') ? 'is-invalid' : '' ?>" id="kode_akun_2" name="kode_akun_2" placeholder="Contoh: 11" value="<?= old('kode_akun_2') ?>" required>
+                <input type="number" class="form-control <?= session('errors.kode_akun_2') ? 'is-invalid' : '' ?>" id="kode_akun_2" name="kode_akun_2" placeholder="Contoh: 11" value="<?= old('kode_akun_2', $akun2['kode_akun_2']) ?>" required>
                 <small class="text-muted">Gunakan dua digit berawalan kode Akun 1 (misal: 11, 12, 21, 41)</small>
                 <?php if (session('errors.kode_akun_2')): ?>
                     <div class="invalid-feedback d-block">
@@ -59,7 +59,7 @@ Tambah Akun 2
             
             <div class="mb-4">
                 <label for="nama_akun_2" class="form-label fw-semibold">Nama Golongan</label>
-                <input type="text" class="form-control <?= session('errors.nama_akun_2') ? 'is-invalid' : '' ?>" id="nama_akun_2" name="nama_akun_2" placeholder="Contoh: Aset Lancar" value="<?= old('nama_akun_2') ?>" required>
+                <input type="text" class="form-control <?= session('errors.nama_akun_2') ? 'is-invalid' : '' ?>" id="nama_akun_2" name="nama_akun_2" placeholder="Contoh: Aset Lancar" value="<?= old('nama_akun_2', $akun2['nama_akun_2']) ?>" required>
                 <?php if (session('errors.nama_akun_2')): ?>
                     <div class="invalid-feedback d-block">
                         <?= session('errors.nama_akun_2') ?>
@@ -67,9 +67,14 @@ Tambah Akun 2
                 <?php endif; ?>
             </div>
             
-            <button type="submit" class="btn btn-success w-100">
-                <i class="bi bi-save me-1"></i> Simpan Data
-            </button>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success flex-grow-1">
+                    <i class="bi bi-save me-1"></i> Simpan Perubahan
+                </button>
+                <a href="/akun2" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i> Batal
+                </a>
+            </div>
         </form>
     </div>
 </div>
