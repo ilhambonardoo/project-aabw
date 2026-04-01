@@ -98,15 +98,39 @@
             </li>
 
             <?php 
-            $jurnalUmumActive = strpos($currentUri, 'jurnal-umum') !== false;
+                $jurnalUmumActive = strpos($currentUri, 'jurnal-umum') !== false;
+                $jurnalPenyesuaianActive = strpos($currentUri, 'jurnal-penyesuaian') !== false;
+                $daftarJurnalActive = $jurnalUmumActive || $jurnalPenyesuaianActive
+            ?>
+
+            <li class="nav-item">
+                <a href="#daftarJurnalMenu" class="nav-link link-dark rounded-3 d-flex <?php echo $daftarJurnalActive ? 'active' : 'link-dark'; ?> align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
+                    <i class="bi bi-journal-check"></i>
+                    <span>Jurnal</span>
+                    <i class="bi bi-chevron-up ms-auto"></i>
+                </a>
+                <div class="collapse  <?php echo $daftarJurnalActive ? 'show' : ''; ?>" id="daftarJurnalMenu">
+                    <ul class="nav flex-column ms-3 mt-1 gap-1">
+                        <li class="nav-item">
+                            <a href="/jurnal-umum" class="nav-link <?php echo $jurnalUmumActive ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                                <i class="bi bi-record2-fill"></i>
+                                <span>Jurnal Umum</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/jurnal-penyesuaian" class="nav-link <?php echo $jurnalPenyesuaianActive ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                                <i class="bi bi-record2-fill"></i>
+                                <span>Jurnal Penyesuaian</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <?php 
             $bukuBesarActive = strpos($currentUri, 'buku-besar') !== false;
             ?>
-            <li class="nav-item">
-                <a href="/jurnal-umum" class="nav-link <?php echo $jurnalUmumActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
-                    <i class="bi bi-journal-text"></i>
-                    <span>Jurnal Umum</span>
-                </a>
-            </li>
+
 
             <li class="nav-item">
                 <a href="/buku-besar" class="nav-link <?php echo $bukuBesarActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
@@ -129,12 +153,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
-                    <i class="bi bi-journal-check"></i>
-                    <span>Jurnal Penyesuaian</span>
-                </a>
-            </li>
+
 
             <li class="nav-item">
                 <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
