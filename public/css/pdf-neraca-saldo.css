@@ -1,0 +1,141 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.container {
+  width: 90%;
+  max-width: 100%;
+  padding: 30px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #000;
+  padding-bottom: 15px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.header-text h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.header-text p {
+  font-size: 11px;
+  margin: 2px 0;
+  color: #555;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.title h3 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.period-info {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 11px;
+}
+
+.period-info p {
+  margin: 3px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table thead {
+  background-color: #f2fb73;
+}
+
+table th {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+table td {
+  border: 1px solid #000;
+  padding: 8px;
+  font-size: 11px;
+}
+
+table td.text-right {
+  text-align: right;
+}
+
+table tfoot tr {
+  font-weight: bold;
+  background-color: #f2fb73;
+}
+
+table tfoot td {
+  border: 1px solid #000;
+  padding: 8px;
+}
+
+.footer {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.signature {
+  text-align: center;
+  width: 200px;
+}
+
+.signature-date {
+  margin-bottom: 60px;
+  font-size: 11px;
+}
+
+.signature-name {
+  border-top: 1px solid #000;
+  padding-top: 5px;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.text-center {
+  text-align: center;
+}
