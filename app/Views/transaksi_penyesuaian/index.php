@@ -41,27 +41,22 @@ Transaksi Penyesuaian
                             <th class="text-center">No</th>
                             <th>Tanggal</th>
                             <th>Deskripsi</th>
-                            <th>Nilai</th>
-                            <th>Waktu</th>
+                            <th>Nilai Perolehan</th>
+                            <th>Masa Manfaat</th>
                             <th class="text-center">Opsi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
-                        $db = \Config\Database::connect();
                         $no = 1; 
                         foreach($transaksi as $t): 
-                            $total = $db->table('detail_transaksi')
-                                        ->selectSum('debit')
-                                        ->where('id_transaksi', $t['id'])
-                                        ->get()->getRow()->debit;
                         ?>
                         <tr>
                             <td class="text-center"><?= $no++ ?></td>
                             <td><?= date('d M Y', strtotime($t['tanggal'])) ?></td>
                             <td><?= esc($t['deskripsi']) ?></td>
-                            <td>Rp <?= number_format($total ?? 0, 0, ',', '.') ?></td>
-                            <td><?= date('H:i:s', strtotime($t['created_at'])) ?></td>
+                            <td class="text-right">Rp <?= number_format($t['nilai_perolehan'] ?? 0, 2, ',', '.') ?></td>
+                            <td class="text-center"><?= intval($t['masa_manfaat'] ?? 0) ?> Bulan</td>
                             <td class="text-center">
                                 <a href="/transaksi-penyesuaian/detail/<?= $t['id'] ?>" class="btn btn-info btn-sm">Detail</a>
                                 <a href="/transaksi-penyesuaian/edit/<?= $t['id'] ?>" class="btn btn-warning btn-sm">Edit</a>

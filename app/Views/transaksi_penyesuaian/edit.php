@@ -34,6 +34,27 @@ Edit Transaksi Penyesuaian
                     </div>
                 </div>
 
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label>Nilai Perolehan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control text-end format-rupiah-input" id="nilaiPerolehan" name="nilai_perolehan" 
+                               value="<?= $transaksi['nilai_perolehan'] > 0 ? number_format($transaksi['nilai_perolehan'], 2, ',', '.') : '0' ?>" required>
+                        <small class="text-muted d-block">Contoh: 12000000</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Masa Manfaat (Bulan) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control text-end" id="masaManfaat" name="masa_manfaat" 
+                               value="<?= intval($transaksi['masa_manfaat'] ?? 0) ?>" min="1" required>
+                        <small class="text-muted d-block">Contoh: 12</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Nilai Penyesuaian <span class="text-muted">(Otomatis)</span></label>
+                        <input type="text" class="form-control text-end" id="nilaiPenyesuaian" name="nilai_penyesuaian" 
+                               value="<?= $transaksi['nilai_penyesuaian'] > 0 ? 'Rp ' . number_format($transaksi['nilai_penyesuaian'], 2, ',', '.') : 'Rp 0' ?>" readonly style="background-color: #e9ecef;">
+                        <small class="text-muted d-block">Dihitung otomatis = Nilai Perolehan ÷ Masa Manfaat</small>
+                    </div>
+                </div>
+
                 <hr>
 
                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -115,7 +136,51 @@ Edit Transaksi Penyesuaian
 
 <?= $this->section('scripts') ?>
 <script>
+function formatRupiahInput(value) {
+    let cleanValue = value.replace(/[Rp\s.]/g, '').replace(',', '.');
+    let numValue = parseFloat(cleanValue);
+    
+    if (isNaN(numValue)) return '0';
+    
+    let parts = numValue.toString().split('.');
+    let intPart = parts[0];
+    let decPart = parts[1] || '';
+    
+    let formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    
+    return decPart ? formatted + ',' + decPart : formatted;
+}
+
+function parseRupiah(rupiahString) {
+    if (!rupiahString) return 0;
+    let cleanString = rupiahString.replace(/\./g, '').replace(/Rp\s?/g, '').replace(/,/g, '.');
+    let val = parseFloat(cleanString);
+    return isNaN(val) ? 0 : val;
+}
+
+function hitungNilaiPenyesuaian() {
+    const nilaiPerolehanInput = document.getElementById('nilaiPerolehan');
+    const masaManfaatInput = document.getElementById('masaManfaat');
+    const nilaiPenyesuaianInput = document.getElementById('nilaiPenyesuaian');
+
+    const nilaiPerolehan = parseRupiah(nilaiPerolehanInput.value);
+    const masaManfaat = parseInt(masaManfaatInput.value) || 0;
+
+    let nilaiPenyesuaian = 0;
+    if (masaManfaat > 0 && nilaiPerolehan > 0) {
+        nilaiPenyesuaian = Math.round(nilaiPerolehan / masaManfaat);
+    }
+
+    if (nilaiPenyesuaian > 0) {
+        nilaiPenyesuaianInput.value = 'Rp ' + formatRupiahInput(nilaiPenyesuaian.toString());
+    } else {
+        nilaiPenyesuaianInput.value = 'Rp 0';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    const nilaiPerolehanInput = document.getElementById('nilaiPerolehan');
+    const masaManfaatInput = document.getElementById('masaManfaat');
     const tbody = document.querySelector('#tabelRincian tbody');
     const btnAddBaris = document.getElementById('btnAddBaris');
     const btnSimpan = document.getElementById('btnSimpan');
@@ -152,13 +217,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
     }
 
-    function parseRupiah(rupiahString) {
-        if (!rupiahString) return 0;
-        let cleanString = rupiahString.replace(/\./g, '').replace(/Rp\s?/g, '').replace(/,/g, '.');
-        let val = parseFloat(cleanString);
-        return isNaN(val) ? 0 : val;
-    }
-
     function hitungTotal() {
         let totalDebit = 0;
         let totalKredit = 0;
@@ -177,10 +235,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusBalance = document.getElementById('statusBalance');
         if (totalDebit > 0 && totalKredit > 0 && totalDebit === totalKredit) {
             statusBalance.innerHTML = '<span class="badge badge-success px-3 py-2">Seimbang (Balance)</span>';
-            btnSimpan.disabled = false;
         } else {
             statusBalance.innerHTML = '<span class="badge badge-danger px-3 py-2">Belum Seimbang</span>';
-            btnSimpan.disabled = true;
         }
     }
 
@@ -214,6 +270,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    nilaiPerolehanInput.addEventListener('keyup', function() {
+        if(this.value === '') this.value = '0';
+        this.value = formatRupiahInput(this.value);
+        hitungNilaiPenyesuaian();
+    });
+
+    nilaiPerolehanInput.addEventListener('change', function() {
+        hitungNilaiPenyesuaian();
+    });
+
+    masaManfaatInput.addEventListener('keyup', function() {
+        hitungNilaiPenyesuaian();
+    });
+
+    masaManfaatInput.addEventListener('change', function() {
+        hitungNilaiPenyesuaian();
+    });
 
     Array.from(tbody.rows).forEach(row => attachEvents(row));
     

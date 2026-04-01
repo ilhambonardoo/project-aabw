@@ -73,11 +73,28 @@ class TransaksiPenyesuaianController extends BaseController
 
     public function store()
     {
+        $nilai_perolehan = $this->request->getPost('nilai_perolehan');
+        $masa_manfaat = $this->request->getPost('masa_manfaat');
+        
+        $nilai_perolehan = str_replace(['Rp', '.', ' '], '', $nilai_perolehan);
+        $nilai_perolehan = str_replace(',', '.', $nilai_perolehan);
+        $nilai_perolehan = floatval($nilai_perolehan) ?: 0;
+        
+        $masa_manfaat = intval($masa_manfaat) ?: 0;
+        
+        $nilai_penyesuaian = 0;
+        if ($masa_manfaat > 0) {
+            $nilai_penyesuaian = $nilai_perolehan / $masa_manfaat;
+        }
+
         $this->transaksiModel->save([
             'no_transaksi'      => $this->request->getPost('no_transaksi'),
             'jenis_transaksi'   => 'Penyesuaian', 
             'tanggal'           => $this->request->getPost('tanggal'),
             'deskripsi'         => $this->request->getPost('deskripsi'),
+            'nilai_perolehan'   => $nilai_perolehan,
+            'masa_manfaat'      => $masa_manfaat,
+            'nilai_penyesuaian' => $nilai_penyesuaian,
         ]);
 
         $id_transaksi = $this->transaksiModel->getInsertID();
@@ -96,11 +113,11 @@ class TransaksiPenyesuaianController extends BaseController
                 $clean_kredit = str_replace(',', '.', $clean_kredit);
 
                 $this->detailTransaksiModel->save([
-                    'id_transaksi' => $id_transaksi,
-                    'id_akun_3'    => $id_akun_3[$i],
-                    'debit'        => $clean_debit ?: 0,
-                    'kredit'       => $clean_kredit ?: 0,
-                    'status'       => $status[$i],
+                    'id_transaksi'     => $id_transaksi,
+                    'id_akun_3'        => $id_akun_3[$i],
+                    'debit'            => $clean_debit ?: 0,
+                    'kredit'           => $clean_kredit ?: 0,
+                    'status'           => $status[$i],
                 ]);
             }
         }
@@ -124,9 +141,26 @@ class TransaksiPenyesuaianController extends BaseController
 
     public function update($id)
     {
+        $nilai_perolehan = $this->request->getPost('nilai_perolehan');
+        $masa_manfaat = $this->request->getPost('masa_manfaat');
+        
+        $nilai_perolehan = str_replace(['Rp', '.', ' '], '', $nilai_perolehan);
+        $nilai_perolehan = str_replace(',', '.', $nilai_perolehan);
+        $nilai_perolehan = floatval($nilai_perolehan) ?: 0;
+        
+        $masa_manfaat = intval($masa_manfaat) ?: 0;
+        
+        $nilai_penyesuaian = 0;
+        if ($masa_manfaat > 0) {
+            $nilai_penyesuaian = $nilai_perolehan / $masa_manfaat;
+        }
+        
         $this->transaksiModel->update($id, [
-            'tanggal'   => $this->request->getPost('tanggal'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
+            'tanggal'           => $this->request->getPost('tanggal'),
+            'deskripsi'         => $this->request->getPost('deskripsi'),
+            'nilai_perolehan'   => $nilai_perolehan,
+            'masa_manfaat'      => $masa_manfaat,
+            'nilai_penyesuaian' => $nilai_penyesuaian,
         ]);
 
         $this->detailTransaksiModel->where('id_transaksi', $id)->delete();
@@ -143,13 +177,13 @@ class TransaksiPenyesuaianController extends BaseController
 
                 $clean_debit  = str_replace(',', '.', $clean_debit);
                 $clean_kredit = str_replace(',', '.', $clean_kredit);
-                
+
                 $this->detailTransaksiModel->save([
-                    'id_transaksi' => $id,
-                    'id_akun_3'    => $id_akun_3[$i],
-                    'debit'        => $clean_debit ?: 0, 
-                    'kredit'       => $clean_kredit ?: 0,
-                    'status'       => $status[$i],
+                    'id_transaksi'     => $id,
+                    'id_akun_3'        => $id_akun_3[$i],
+                    'debit'            => $clean_debit ?: 0, 
+                    'kredit'           => $clean_kredit ?: 0,
+                    'status'           => $status[$i],
                 ]);
             }
         }
