@@ -20,19 +20,36 @@ Detail Transaksi Penyesuaian
         </div>
         <div class="card-body">
             <div class="row mb-4">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <p class="mb-1 text-muted">No. Transaksi</p>
                     <h5 class="font-weight-bold"><?= esc($transaksi['no_transaksi']) ?></h5>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <p class="mb-1 text-muted">Tanggal</p>
                     <h5 class="font-weight-bold"><?= date('d F Y', strtotime($transaksi['tanggal'])) ?></h5>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <p class="mb-1 text-muted">Deskripsi</p>
                     <h5 class="font-weight-bold"><?= esc($transaksi['deskripsi']) ?></h5>
                 </div>
             </div>
+
+            <div class="row mb-4 p-3 bg-light rounded">
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted small">Nilai Perolehan</p>
+                    <h6 class="font-weight-bold text-success">Rp <?= number_format($transaksi['nilai_perolehan'] ?? 0, 2, ',', '.') ?></h6>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted small">Masa Manfaat</p>
+                    <h6 class="font-weight-bold text-info"><?= intval($transaksi['masa_manfaat'] ?? 0) ?> Bulan</h6>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted small">Nilai Penyesuaian</p>
+                    <h6 class="font-weight-bold text-primary">Rp <?= number_format($transaksi['nilai_penyesuaian'] ?? 0, 2, ',', '.') ?></h6>
+                </div>
+            </div>
+
+            <hr>
 
             <h6 class="font-weight-bold text-primary mb-3">Rincian Jurnal</h6>
             <div class="table-responsive">
@@ -44,7 +61,7 @@ Detail Transaksi Penyesuaian
                             <th>Nama Akun</th>
                             <th class="text-right">Debit</th>
                             <th class="text-right">Kredit</th>
-                            <th>Status</th>
+                            <th class="text-center">Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,17 +77,17 @@ Detail Transaksi Penyesuaian
                             <td><?= $no++ ?></td>
                             <td><?= esc($d['kode_akun_3']) ?></td>
                             <td><?= esc($d['nama_akun_3']) ?></td>
-                            <td class="text-right">Rp <?= number_format($d['debit'], 0, ',', '.') ?></td>
-                            <td class="text-right">Rp <?= number_format($d['kredit'], 0, ',', '.') ?></td>
-                            <td><span class="badge badge-secondary text-dark h5"><?= esc($d['status']) ?></span></td>
+                            <td class="text-right">Rp <?= number_format($d['debit'], 2, ',', '.') ?></td>
+                            <td class="text-right">Rp <?= number_format($d['kredit'], 2, ',', '.') ?></td>
+                            <td class="text-center"><span class="badge badge-secondary text-dark"><?= esc($d['status']) ?></span></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
                         <tr class="font-weight-bold bg-light">
                             <td colspan="3" class="text-right">TOTAL</td>
-                            <td class="text-right text-success">Rp <?= number_format($totalDebit, 0, ',', '.') ?></td>
-                            <td class="text-right text-success">Rp <?= number_format($totalKredit, 0, ',', '.') ?></td>
+                            <td class="text-right text-success">Rp <?= number_format($totalDebit, 2, ',', '.') ?></td>
+                            <td class="text-right text-success">Rp <?= number_format($totalKredit, 2, ',', '.') ?></td>
                             <td></td>
                         </tr>
                     </tfoot>
