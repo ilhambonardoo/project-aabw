@@ -129,6 +129,9 @@
 
             <?php 
             $bukuBesarActive = strpos($currentUri, 'buku-besar') !== false;
+            $neracaSaldoActive = strpos($currentUri, 'neraca-saldo') !== false && strpos($currentUri, 'neraca-saldo-disesuaikan') === false;
+            $neracaSaldoDisesuaikanActive = strpos($currentUri, 'neraca-saldo-disesuaikan') !== false;
+            $daftarNeracaActive = $neracaSaldoActive || $neracaSaldoDisesuaikanActive;
             ?>
 
 
@@ -140,26 +143,27 @@
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
+                <a href="#daftarNeracaMenu" class="nav-link link-dark rounded-3 d-flex <?php echo $daftarNeracaActive ? 'active' : 'link-dark'; ?> align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
                     <i class="bi bi-graph-up"></i>
-                    <span>Neraca Saldo</span>
+                    <span>Neraca</span>
+                    <i class="bi bi-chevron-up ms-auto"></i>
                 </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
-                    <i class="bi bi-arrow-repeat"></i>
-                    <span>Transaksi Penyesuaian</span>
-                </a>
-            </li>
-
-
-
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2" style="transition: all 0.3s ease;">
-                    <i class="bi bi-graph-down"></i>
-                    <span>Neraca Saldo Disesuaikan</span>
-                </a>
+                <div class="collapse  <?php echo $daftarNeracaActive ? 'show' : ''; ?>" id="daftarNeracaMenu">
+                    <ul class="nav flex-column ms-3 mt-1 gap-1">
+                        <li class="nav-item">
+                            <a href="/neraca-saldo" class="nav-link <?php echo $neracaSaldoActive ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                                <i class="bi bi-record2-fill"></i>
+                                <span>Neraca Saldo</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/neraca-saldo-disesuaikan" class="nav-link <?php echo $neracaSaldoDisesuaikanActive ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                                <i class="bi bi-record2-fill"></i>
+                                <span>Neraca Saldo Disesuaikan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
 
             <li class="nav-item">
