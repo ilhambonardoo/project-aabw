@@ -90,13 +90,6 @@ class JurnalUmumController extends BaseController
             });
         }
 
-        if($tgl_awal && $tgl_akhir){
-            $this->transaksiModel->where('jenis_transaksi', 'umum')->where('tanggal >=', $tgl_awal)->where('tanggal <=', $tgl_akhir)->orderBy('tanggal', 'DESC')->findAll();
-        } else {
-            $this->transaksiModel->where('jenis_transaksi', 'umum')->orderBy('tanggal', 'DESC')->findAll();
-        }
-
-
         $data['groupedData'] = $groupedData;
         $data['totalDebit'] = $totalDebit;
         $data['totalKredit'] = $totalKredit;
@@ -179,7 +172,9 @@ class JurnalUmumController extends BaseController
         $html = view('jurnal_umum/cetak-pdf', [
             'groupedData' => $groupedData,
             'totalDebit' => $totalDebit,
-            'totalKredit' => $totalKredit
+            'totalKredit' => $totalKredit,
+            'tgl_awal' => $tgl_awal,
+            'tgl_akhir' => $tgl_akhir
         ]);
 
         $options = new Options();
