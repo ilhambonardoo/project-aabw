@@ -6,7 +6,6 @@ use App\Controllers\BaseController;
 use App\Models\Akun3Model;
 use App\Models\DetailTransaksiModel;
 use App\Models\TransaksiModel;
-use DateError;
 
 class TransaksiUmumController extends BaseController
 {
@@ -41,23 +40,40 @@ class TransaksiUmumController extends BaseController
         return view ('transaksi_umum/index', $data);
     }
 
-    public function create(){
-        $tanggal_sekarang = date('Ymd');
+    private function generateNoTransaksi($tanggal)
+    {
+        $tanggalFormat = str_replace('-', '', $tanggal);
+        $prefixTransaksi = 'TRXU-' . $tanggalFormat . '-';
+        
         $db = \Config\Database::connect();
-
-        $lastTransaksi = $db->table('transaksi')
-            ->selectCount('id', 'count')
-            ->like('no_transaksi', 'TRXU-' . $tanggal_sekarang, 'after')
+        $transaksiTerakhir = $db->table('transaksi')
+            ->select('no_transaksi')
+            ->where('jenis_transaksi', 'Umum')
+            ->like('no_transaksi', $prefixTransaksi, 'after')
+            ->orderBy('id', 'DESC')
+            ->limit(1)
             ->get()
             ->getRow();
+        
+        if ($transaksiTerakhir) {
+            $noTransaksiTerakhir = $transaksiTerakhir->no_transaksi;
+            $nomorUrut = intval(substr($noTransaksiTerakhir, -3));
+            $nomorUrut = $nomorUrut + 1;
+        } else {
+            $nomorUrut = 1;
+        }
+        
+        $noTransaksi = $prefixTransaksi . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
+        
+        return $noTransaksi;
+    }
 
-        $noUrut = ($lastTransaksi->count + 1);
-        $noUrutFormat = str_pad($noUrut, 3, '0', STR_PAD_LEFT);
 
+    public function create(){
+        $noTransaksiSekarang = $this->generateNoTransaksi(date('Y-m-d'));
         $data = [
             'title'              => 'Tambah Transaksi Umum',
-            'tanggal_sekarang'   => $tanggal_sekarang,
-            'no_urut_sekarang'   => $noUrutFormat,
+            'no_transaksi'       => $noTransaksiSekarang,
             'akun3'              => $this->akun3Model->findAll(),
         ];
 
@@ -66,10 +82,14 @@ class TransaksiUmumController extends BaseController
 
     public function store()
     {
+        $tanggal = $this->request->getPost('tanggal');
+        
+        $noTransaksi = $this->generateNoTransaksi($tanggal);
+
         $this->transaksiModel->save([
-            'no_transaksi'      => $this->request->getPost('no_transaksi'),
+            'no_transaksi'      => $noTransaksi,
             'jenis_transaksi'   => 'Umum',
-            'tanggal'           => $this->request->getPost('tanggal'),
+            'tanggal'           => $tanggal,
             'deskripsi'         => $this->request->getPost('deskripsi'),
             'keterangan_jurnal' => $this->request->getPost('keterangan_jurnal'),
         ]);
@@ -92,8 +112,8 @@ class TransaksiUmumController extends BaseController
                 $this->detailTransaksiModel->save([
                     'id_transaksi' => $id_transaksi,
                     'id_akun_3'    => $id_akun_3[$i],
-                    'debit'        => $clean_debit ?: 0,
-                    'kredit'       => $clean_kredit ?: 0,
+                    'debit'        => floatval($clean_debit) ?: 0,
+                    'kredit'       => floatval($clean_kredit) ?: 0,
                     'status'       => $status[$i],
                 ]);
             }
@@ -141,8 +161,8 @@ class TransaksiUmumController extends BaseController
                 $this->detailTransaksiModel->save([
                     'id_transaksi' => $id,
                     'id_akun_3'    => $id_akun_3[$i],
-                    'debit'        => $clean_debit ?: 0, 
-                    'kredit'       => $clean_kredit ?: 0,
+                    'debit'        => floatval($clean_debit) ?: 0, 
+                    'kredit'       => floatval($clean_kredit) ?: 0,
                     'status'       => $status[$i],
                 ]);
             }
