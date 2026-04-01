@@ -77,23 +77,23 @@ Edit Transaksi Penyesuaian
                         </thead>
                         <tbody>
                             <?php foreach($detail as $d): ?>
-                            <tr>
+                            <tr class="baris-jurnal">
                                 <td>
-                                    <select class="form-control" name="id_akun_3[]" required>
+                                    <select class="form-control select-akun" name="id_akun_3[]" required>
                                         <option value="">-- Pilih Akun --</option>
                                         <?php foreach($akun3 as $a): ?>
-                                            <option value="<?= $a['id'] ?>" <?= $d['id_akun_3'] == $a['id'] ? 'selected' : '' ?>>
+                                            <option value="<?= $a['id'] ?>" data-saldo="<?= $a['saldo_normal'] ?>" <?= $d['id_akun_3'] == $a['id'] ? 'selected' : '' ?>>
                                                 <?= $a['kode_akun_3'] ?> - <?= $a['nama_akun_3'] ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end debit-input format-rupiah" name="debit[]" 
+                                    <input type="text" class="form-control text-end input-debit format-rupiah" name="debit[]" 
                                            value="<?= $d['debit'] > 0 ? 'Rp ' . number_format($d['debit'], 0, ',', '.') : '0' ?>" required>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end kredit-input format-rupiah" name="kredit[]" 
+                                    <input type="text" class="form-control text-end input-kredit format-rupiah" name="kredit[]" 
                                            value="<?= $d['kredit'] > 0 ? 'Rp ' . number_format($d['kredit'], 0, ',', '.') : '0' ?>" required>
                                 </td>
                                 <td>
@@ -132,68 +132,15 @@ Edit Transaksi Penyesuaian
         </div>
     </div>
 </div>
-<?= $this->endSection() ?>
 
-<?= $this->section('scripts') ?>
-<script>
-function formatRupiahInput(value) {
-    let cleanValue = value.replace(/[Rp\s.]/g, '').replace(',', '.');
-    let numValue = parseFloat(cleanValue);
-    
-    if (isNaN(numValue)) return '0';
-    
-    let parts = numValue.toString().split('.');
-    let intPart = parts[0];
-    let decPart = parts[1] || '';
-    
-    let formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    
-    return decPart ? formatted + ',' + decPart : formatted;
-}
-
-function parseRupiah(rupiahString) {
-    if (!rupiahString) return 0;
-    let cleanString = rupiahString.replace(/\./g, '').replace(/Rp\s?/g, '').replace(/,/g, '.');
-    let val = parseFloat(cleanString);
-    return isNaN(val) ? 0 : val;
-}
-
-function hitungNilaiPenyesuaian() {
-    const nilaiPerolehanInput = document.getElementById('nilaiPerolehan');
-    const masaManfaatInput = document.getElementById('masaManfaat');
-    const nilaiPenyesuaianInput = document.getElementById('nilaiPenyesuaian');
-
-    const nilaiPerolehan = parseRupiah(nilaiPerolehanInput.value);
-    const masaManfaat = parseInt(masaManfaatInput.value) || 0;
-
-    let nilaiPenyesuaian = 0;
-    if (masaManfaat > 0 && nilaiPerolehan > 0) {
-        nilaiPenyesuaian = Math.round(nilaiPerolehan / masaManfaat);
-    }
-
-    if (nilaiPenyesuaian > 0) {
-        nilaiPenyesuaianInput.value = 'Rp ' + formatRupiahInput(nilaiPenyesuaian.toString());
-    } else {
-        nilaiPenyesuaianInput.value = 'Rp 0';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const nilaiPerolehanInput = document.getElementById('nilaiPerolehan');
-    const masaManfaatInput = document.getElementById('masaManfaat');
-    const tbody = document.querySelector('#tabelRincian tbody');
-    const btnAddBaris = document.getElementById('btnAddBaris');
-    const btnSimpan = document.getElementById('btnSimpan');
-
-    const akunOptions = `
-        <option value="">-- Pilih Akun --</option>
+<!-- Hidden data for JavaScript -->
+<div style="display: none;">
+    <div id="data-akun-options" data-akun-options>
         <?php foreach($akun3 as $a): ?>
-            <option value="<?= $a['id'] ?>"><?= $a['kode_akun_3'] ?> - <?= $a['nama_akun_3'] ?></option>
+            <option value="<?= $a['id'] ?>" data-saldo="<?= $a['saldo_normal'] ?>"><?= $a['kode_akun_3'] ?> - <?= $a['nama_akun_3'] ?></option>
         <?php endforeach; ?>
-    `;
-
-    const statusOptions = `
-        <option value="">-- Pilih Status --</option>
+    </div>
+    <div id="data-status-options" data-status-options>
         <option value="Penerimaan">Penerimaan</option>
         <option value="Pengeluaran">Pengeluaran</option>
         <option value="Investasi Masuk">Investasi Masuk</option>
@@ -201,120 +148,11 @@ document.addEventListener('DOMContentLoaded', function() {
         <option value="Pendanaan Masuk">Pendanaan Masuk</option>
         <option value="Pendanaan Keluar">Pendanaan Keluar</option>
         <option value="Normal">Normal</option>
-    `;
+    </div>
+</div>
 
-    function formatRupiah(angka) {
-        let number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+<?= $this->endSection() ?>
 
-        if (ribuan) {
-            let separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
-        return split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-    }
-
-    function hitungTotal() {
-        let totalDebit = 0;
-        let totalKredit = 0;
-
-        document.querySelectorAll('.debit-input').forEach(input => {
-            totalDebit += parseRupiah(input.value);
-        });
-
-        document.querySelectorAll('.kredit-input').forEach(input => {
-            totalKredit += parseRupiah(input.value);
-        });
-
-        document.getElementById('totalDebit').innerText = 'Rp ' + formatRupiah(totalDebit.toString());
-        document.getElementById('totalKredit').innerText = 'Rp ' + formatRupiah(totalKredit.toString());
-
-        const statusBalance = document.getElementById('statusBalance');
-        if (totalDebit > 0 && totalKredit > 0 && totalDebit === totalKredit) {
-            statusBalance.innerHTML = '<span class="badge badge-success px-3 py-2">Seimbang (Balance)</span>';
-        } else {
-            statusBalance.innerHTML = '<span class="badge badge-danger px-3 py-2">Belum Seimbang</span>';
-        }
-    }
-
-    function attachEvents(row) {
-        const debitInput = row.querySelector('.debit-input');
-        const kreditInput = row.querySelector('.kredit-input');
-        const btnHapus = row.querySelector('.btn-hapus');
-
-        [debitInput, kreditInput].forEach(input => {
-            input.addEventListener('keyup', function(e) {
-                if(this.value === '') this.value = '0';
-                this.value = formatRupiah(this.value);
-                
-                if (parseFloat(parseRupiah(this.value)) > 0) {
-                    if (this.classList.contains('debit-input')) {
-                        kreditInput.value = '0';
-                    } else {
-                        debitInput.value = '0';
-                    }
-                }
-                hitungTotal();
-            });
-        });
-
-        btnHapus.addEventListener('click', function() {
-            if (tbody.rows.length > 1) {
-                row.remove();
-                hitungTotal();
-            } else {
-                alert('Minimal harus ada 1 baris rincian!');
-            }
-        });
-    }
-
-    nilaiPerolehanInput.addEventListener('keyup', function() {
-        if(this.value === '') this.value = '0';
-        this.value = formatRupiahInput(this.value);
-        hitungNilaiPenyesuaian();
-    });
-
-    nilaiPerolehanInput.addEventListener('change', function() {
-        hitungNilaiPenyesuaian();
-    });
-
-    masaManfaatInput.addEventListener('keyup', function() {
-        hitungNilaiPenyesuaian();
-    });
-
-    masaManfaatInput.addEventListener('change', function() {
-        hitungNilaiPenyesuaian();
-    });
-
-    Array.from(tbody.rows).forEach(row => attachEvents(row));
-    
-    hitungTotal(); 
-
-    btnAddBaris.addEventListener('click', function() {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><select class="form-control" name="id_akun_3[]" required>${akunOptions}</select></td>
-            <td><input type="text" class="form-control text-end debit-input format-rupiah" name="debit[]" value="0" required></td>
-            <td><input type="text" class="form-control text-end kredit-input format-rupiah" name="kredit[]" value="0" required></td>
-            <td><select class="form-control" name="status[]" required>${statusOptions}</select></td>
-            <td class="text-center"><button type="button" class="btn btn-danger btn-sm btn-hapus"><i class="fas fa-trash"></i>X</button></td>
-        `;
-        tbody.appendChild(tr);
-        attachEvents(tr);
-    });
-
-    document.getElementById('formTransaksi').addEventListener('submit', function(e) {
-        const totalDebit = parseRupiah(document.getElementById('totalDebit').innerText);
-        const totalKredit = parseRupiah(document.getElementById('totalKredit').innerText);
-        
-        if (totalDebit !== totalKredit || totalDebit === 0) {
-            e.preventDefault();
-            alert('Transaksi tidak seimbang atau masih kosong!');
-        }
-    });
-});
-</script>
+<?= $this->section('scripts') ?>
+<script src="<?= base_url('js/transaksi-penyesuaian.js') ?>"></script>
 <?= $this->endSection() ?>

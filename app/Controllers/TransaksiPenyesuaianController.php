@@ -48,23 +48,40 @@ class TransaksiPenyesuaianController extends BaseController
         return view('transaksi_penyesuaian/index', $data);
     }
 
-    public function create(){
-        $tanggal_sekarang = date('Ymd');
+    private function generateNoTransaksi($tanggal)
+    {
+        $tanggalFormat = str_replace('-', '', $tanggal);
+        $prefixTransaksi = 'TRXP-' . $tanggalFormat . '-';
         
         $db = \Config\Database::connect();
-        $lastTransaksi = $db->table('transaksi')
-            ->selectCount('id', 'count')
-            ->like('no_transaksi', 'TRXP-' . $tanggal_sekarang, 'after')
+        $transaksiTerakhir = $db->table('transaksi')
+            ->select('no_transaksi')
+            ->where('jenis_transaksi', 'Penyesuaian')
+            ->like('no_transaksi', $prefixTransaksi, 'after')
+            ->orderBy('id', 'DESC')
+            ->limit(1)
             ->get()
             ->getRow();
         
-        $noUrut = ($lastTransaksi->count + 1);
-        $noUrutFormat = str_pad($noUrut, 3, '0', STR_PAD_LEFT);
+        if ($transaksiTerakhir) {
+            $noTransaksiTerakhir = $transaksiTerakhir->no_transaksi;
+            $nomorUrut = intval(substr($noTransaksiTerakhir, -3)); 
+            $nomorUrut = $nomorUrut + 1;
+        } else {
+            $nomorUrut = 1;
+        }
+        
+        $noTransaksi = $prefixTransaksi . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
+        
+        return $noTransaksi;
+    }
+
+    public function create(){
+        $noTransaksiSekarang = $this->generateNoTransaksi(date('Y-m-d'));
 
         $data = [
             'title'              => 'Tambah Transaksi Penyesuaian',
-            'tanggal_sekarang'   => $tanggal_sekarang,
-            'no_urut_sekarang'   => $noUrutFormat,
+            'no_transaksi'       => $noTransaksiSekarang,
             'akun3'              => $this->akun3Model->findAll(),
         ];
 
@@ -73,6 +90,7 @@ class TransaksiPenyesuaianController extends BaseController
 
     public function store()
     {
+        $tanggal = $this->request->getPost('tanggal');
         $nilai_perolehan = $this->request->getPost('nilai_perolehan');
         $masa_manfaat = $this->request->getPost('masa_manfaat');
         
@@ -86,11 +104,34 @@ class TransaksiPenyesuaianController extends BaseController
         if ($masa_manfaat > 0) {
             $nilai_penyesuaian = $nilai_perolehan / $masa_manfaat;
         }
+        
+        $tanggalFormat = str_replace('-', '', $tanggal);
+        $prefixTransaksi = 'TRXP-' . $tanggalFormat . '-';
+        
+        $db = \Config\Database::connect();
+        $transaksiTerakhir = $db->table('transaksi')
+            ->select('no_transaksi')
+            ->where('jenis_transaksi', 'Penyesuaian')
+            ->like('no_transaksi', $prefixTransaksi, 'after')
+            ->orderBy('id', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRow();
+        
+        if ($transaksiTerakhir) {
+            $noTransaksiTerakhir = $transaksiTerakhir->no_transaksi;
+            $nomorUrut = intval(substr($noTransaksiTerakhir, -3));
+            $nomorUrut = $nomorUrut + 1;
+        } else {
+            $nomorUrut = 1;
+        }
+        
+        $noTransaksi = $prefixTransaksi . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
 
         $this->transaksiModel->save([
-            'no_transaksi'      => $this->request->getPost('no_transaksi'),
+            'no_transaksi'      => $noTransaksi,
             'jenis_transaksi'   => 'Penyesuaian', 
-            'tanggal'           => $this->request->getPost('tanggal'),
+            'tanggal'           => $tanggal,
             'deskripsi'         => $this->request->getPost('deskripsi'),
             'nilai_perolehan'   => $nilai_perolehan,
             'masa_manfaat'      => $masa_manfaat,
@@ -115,8 +156,8 @@ class TransaksiPenyesuaianController extends BaseController
                 $this->detailTransaksiModel->save([
                     'id_transaksi'     => $id_transaksi,
                     'id_akun_3'        => $id_akun_3[$i],
-                    'debit'            => $clean_debit ?: 0,
-                    'kredit'           => $clean_kredit ?: 0,
+                    'debit'            => floatval($clean_debit) ?: 0,
+                    'kredit'           => floatval($clean_kredit) ?: 0,
                     'status'           => $status[$i],
                 ]);
             }
@@ -181,8 +222,8 @@ class TransaksiPenyesuaianController extends BaseController
                 $this->detailTransaksiModel->save([
                     'id_transaksi'     => $id,
                     'id_akun_3'        => $id_akun_3[$i],
-                    'debit'            => $clean_debit ?: 0, 
-                    'kredit'           => $clean_kredit ?: 0,
+                    'debit'            => floatval($clean_debit) ?: 0, 
+                    'kredit'           => floatval($clean_kredit) ?: 0,
                     'status'           => $status[$i],
                 ]);
             }
