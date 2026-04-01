@@ -1,128 +1,106 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
     <title>Jurnal Umum</title>
     <?php 
-        $cssPath = FCPATH . 'css/cetak-jurnal-umum.css';
-        if(file_exists($cssPath)) {
-            echo '<style>' . file_get_contents($cssPath) . '</style>';
-        }
+        $jurnalStyle = FCPATH . '/css/cetak-jurnal.css' ;
+        if(file_exists($jurnalStyle)){
+            echo '<style>' . file_get_contents($jurnalStyle) . '</style>';
+        }   
     ?>
 </head>
 <body>
-    <div class="page">
+    <div class="container">
         <div class="header">
-            <h1>JURNAL UMUM</h1>
+            <div class="logo">
+                <?php 
+                $logoPath = FCPATH . 'img/logo-yayasan.png';
+                if (file_exists($logoPath)) {
+                    $imageData = base64_encode(file_get_contents($logoPath));
+                    $imageMime = 'image/png';
+                    echo '<img src="data:' . $imageMime . ';base64,' . $imageData . '" />';
+                }
+                ?>
+            </div>
+            <div class="header-text">
+                <h2>YAYASAN AL-ISTIANAH</h2>
+                <p>Jurnal Umum</p>
+                <p>Periode: <?= isset($tgl_awal) && $tgl_awal ? date('d/m/Y', strtotime($tgl_awal)) : 'Semua' ?> s/d <?= isset($tgl_akhir) && $tgl_akhir ? date('d/m/Y', strtotime($tgl_akhir)) : 'Semua' ?></p>
+            </div>
         </div>
 
-        <table class="meta-table">
-            <tr>
-                <td class="text-left">
-                    <strong>Tanggal Cetak:</strong> <?= date('d-m-Y H:i:s') ?>
-                </td>
-                <td class="text-right">
-                    <strong>Periode:</strong> Semua Periode
-                </td>
-            </tr>
-        </table>
+        <div class="period-info">
+            <p>
+                <strong>Periode:</strong> 
+                <?= isset($tgl_awal) && $tgl_awal ? date('d F Y', strtotime($tgl_awal)) : 'Semua' ?> 
+                hingga 
+                <?= isset($tgl_akhir) && $tgl_akhir ? date('d F Y', strtotime($tgl_akhir)) : 'Semua' ?>
+            </p>
+        </div>
 
-        <table class="jurnal-table">
+        <table>
             <thead>
                 <tr>
-                    <th style="width: 15%;">Tanggal</th>
-                    <th style="width: 25%;">Keterangan</th>
-                    <th style="width: 10%;">Ref</th>
-                    <th style="width: 12%;">Debit</th>
-                    <th style="width: 12%;">Kredit</th>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                    <th>Ref</th>
+                    <th class="text-right">Debit (Rp)</th>
+                    <th class="text-right">Kredit (Rp)</th>
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                    if (!empty($groupedData)): 
-                        foreach ($groupedData as $transaction): 
-                ?>
-                    <?php 
-                        $firstRow = true;
-                        foreach ($transaction['details'] as $detail): 
-                    ?>
-                        <tr>
-                            <td class="text-center">
-                                <?php if ($firstRow): ?>
-                                    <strong><?= date('d-m-Y', strtotime($transaction['tanggal'])) ?></strong>
-                                    <div class="desc"><?= esc($transaction['no_transaksi']) ?></div>
-                                <?php endif; ?>
-                            </td>
-
-                            <td>
-                                <?php if ($detail['kredit'] > 0): ?>
-                                    <div class="indent">
-                                        <?= esc($detail['nama_akun_3']) ?>
-                                    </div>
-                                <?php else: ?>
-                                    <div>
-                                        <strong><?= esc($detail['nama_akun_3']) ?></strong>
-                                    </div>
-                                <?php endif; ?>
-                            </td>
-
-                            <td class="text-center">
-                                <?= esc($detail['kode_akun_3']) ?>
-                            </td>
-
-                            <td class="text-right">
-                                <?php if ($detail['debit'] > 0): ?>
-                                    <span class="amount">
-                                        <?= number_format($detail['debit'], 2, ',', '.') ?>
-                                    </span>
-                                <?php endif; ?>
-                            </td>
-
-                            <td class="text-right">
-                                <?php if ($detail['kredit'] > 0): ?>
-                                    <span class="amount">
-                                        <?= number_format($detail['kredit'], 2, ',', '.') ?>
-                                    </span>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <?php $firstRow = false; ?>
-                    <?php endforeach; ?>
-                <?php endforeach; ?>
-                <?php else: ?>
+                <?php if (empty($groupedData)): ?>
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 20px;">
-                            Tidak ada data jurnal umum untuk ditampilkan
-                        </td>
+                        <td colspan="5" style="text-align: center; padding: 20px;">Tidak ada data jurnal umum</td>
                     </tr>
+                <?php else: ?>
+                    <?php foreach ($groupedData as $noTransaksi => $transaksi): ?>
+                        <tr class="header-row">
+                            <td><?= date('d/m/Y', strtotime($transaksi['tanggal'])) ?></td>
+                            <td><?= $transaksi['deskripsi'] ?? '-' ?></td>
+                            <td><?= $noTransaksi ?></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                        </tr>
+
+                        <!-- Detail Akun -->
+                        <?php foreach ($transaksi['details'] as $detail): ?>
+                            <tr class="detail-row">
+                                <td></td>
+                                <td style="padding-left: 30px;"><?= $detail['kode_akun_3'] ?> - <?= $detail['nama_akun_3'] ?></td>
+                                <td></td>
+                                <td class="text-right">
+                                    <?= $detail['debit'] > 0 ? number_format($detail['debit'], 2, ',', '.') : '-' ?>
+                                </td>
+                                <td class="text-right">
+                                    <?= $detail['kredit'] > 0 ? number_format($detail['kredit'], 2, ',', '.') : '-' ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3" class="text-right"><strong>TOTAL KESELURUHAN:</strong></td>
-                    <td class="text-right">
-                        <?php if (isset($totalDebit) && $totalDebit > 0): ?>
-                            <span class="amount"><?= number_format($totalDebit, 2, ',', '.') ?></span>
-                        <?php endif; ?>
-                    </td>
-                    <td class="text-right">
-                        <?php if (isset($totalKredit) && $totalKredit > 0): ?>
-                            <span class="amount"><?= number_format($totalKredit, 2, ',', '.') ?></span>
-                        <?php endif; ?>
-                    </td>
+                    <td colspan="3"><strong>JUMLAH</strong></td>
+                    <td class="text-right"><strong><?= number_format($totalDebit, 2, ',', '.') ?></strong></td>
+                    <td class="text-right"><strong><?= number_format($totalKredit, 2, ',', '.') ?></strong></td>
                 </tr>
             </tfoot>
         </table>
 
-        <table class="signature-table">
-            <tr>
-                <td>
-                    <div class="date-line">Bogor, <?= date('d F Y') ?></div>
-                    <div class="sign-line">Pimpinan Yayasan</div>
-                </td>
-            </tr>
-        </table>
+        <!-- Footer Signature -->
+        <div class="footer">
+            <div class="signature">
+                <div class="signature-date">
+                    Bogor, <?= date('d F Y') ?>
+                </div>
+                <div class="signature-name">
+                    Pimpinan Yayasan
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
