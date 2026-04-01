@@ -74,3 +74,11 @@ $routes->get('/jurnal-penyesuaian/cetak-pdf', 'JurnalPenyesuaianController::ceta
 $routes->get('/buku-besar', 'BukuBesarController::index');
 $routes->get('/buku-besar/cetak-pdf', 'BukuBesarController::cetakPdf');
 
+// Routes untuk Neraca Saldo
+$routes->get('/neraca-saldo', 'NeracaSaldoController::index');
+$routes->get('/neraca-saldo/cetak-pdf', 'NeracaSaldoController::cetakPdf');
+
+// Routes untuk Neraca Saldo Disesuaikan
+$routes->get('/neraca-saldo-disesuaikan', 'NeracaSaldoDisesuaikanController::index');
+$routes->get('/neraca-saldo-disesuaikan/cetak-pdf', 'NeracaSaldoDisesuaikanController::cetakPdf');
+
