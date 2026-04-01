@@ -66,6 +66,10 @@ $routes->get('/transaksi-penyesuaian/delete/(:num)', 'TransaksiPenyesuaianContro
 $routes->get('/jurnal-umum', 'JurnalUmumController::index');
 $routes->get('/jurnal-umum/cetak-pdf', 'JurnalUmumController::cetakPdf');
 
+// Routes untuk Jurnal Penyesuaian
+$routes->get('/jurnal-penyesuaian', 'JurnalPenyesuaianController::index');
+$routes->get('/jurnal-penyesuaian/cetak-pdf', 'JurnalPenyesuaianController::cetakPdf');
+
 // Routes untuk Buku Besar
 $routes->get('/buku-besar', 'BukuBesarController::index');
 $routes->get('/buku-besar/cetak-pdf', 'BukuBesarController::cetakPdf');
