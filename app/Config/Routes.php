@@ -82,3 +82,7 @@ $routes->get('/neraca-saldo/cetak-pdf', 'NeracaSaldoController::cetakPdf');
 $routes->get('/neraca-saldo-disesuaikan', 'NeracaSaldoDisesuaikanController::index');
 $routes->get('/neraca-saldo-disesuaikan/cetak-pdf', 'NeracaSaldoDisesuaikanController::cetakPdf');
 
+// Routes untuk Laporan Posisi Keuangan
+$routes->get('/laporan-posisi-keuangan', 'LaporanPosisiKeuanganController::index');
+$routes->get('/laporan-posisi-keuangan/cetak-pdf', 'LaporanPosisiKeuanganController::cetakPdf');
+
