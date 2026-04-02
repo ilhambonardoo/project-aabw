@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/auth') ?>
 
+<?= $this->section('title'); ?>
+Register
+<?= $this->endSection(); ?>
+
 <?= $this->section('content') ?>
 <div class="auth-container">
     <div class="auth-wrapper">
