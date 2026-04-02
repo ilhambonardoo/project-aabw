@@ -41,13 +41,6 @@ class Akun2Controller extends BaseController
                 'label' => 'Induk Klasifikasi',
                 'rules' => 'required|integer'
             ],
-            'kode_akun_2' => [
-                'label' => 'Kode Akun 2',
-                'rules' => 'required|numeric|is_unique[akun_2.kode_akun_2]',
-                'errors' => [
-                    'is_unique' => '{field} sudah terdaftar dalam sistem'
-                ]
-            ],
             'nama_akun_2' => [
                 'label' => 'Nama Akun 2',
                 'rules' => 'required|min_length[3]|max_length[100]'
@@ -58,9 +51,26 @@ class Akun2Controller extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $id_akun_1 = $this->request->getPost('id_akun_1');
+        $akun1 = $this->akun1model->find($id_akun_1);
+        
+        if (!$akun1) {
+            return redirect()->back()->withInput()->with('error', 'Akun 1 tidak ditemukan.');
+        }
+
+        $kode_akun_1 = $akun1['kode_akun_1'];
+
+        $max_kode = $this->akun2model->where('id_akun_1', $id_akun_1)->selectMax('kode_akun_2')->first();
+
+        if (empty($max_kode['kode_akun_2'])) {
+            $new_kode = $kode_akun_1 . '1';
+        } else {
+            $new_kode = (int)$max_kode['kode_akun_2'] + 1;
+        }
+
         $this->akun2model->save( [
-            'id_akun_1' => $this->request->getPost('id_akun_1'),
-            'kode_akun_2' => $this->request->getPost('kode_akun_2'),
+            'id_akun_1' => $id_akun_1,
+            'kode_akun_2' => (string)$new_kode,
             'nama_akun_2' => $this->request->getPost('nama_akun_2')
         ]);
 
@@ -112,9 +122,29 @@ class Akun2Controller extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $id_akun_1 = $this->request->getPost('id_akun_1');
+        $akun1 = $this->akun1model->find($id_akun_1);
+        
+        if (!$akun1) {
+            return redirect()->back()->withInput()->with('error', 'Akun 1 tidak ditemukan.');
+        }
+
+        $kode_akun_1 = $akun1['kode_akun_1'];
+
+        if ($akun2['id_akun_1'] != $id_akun_1) {
+            $max_kode = $this->akun2model->where('id_akun_1', $id_akun_1)->selectMax('kode_akun_2')->first();
+            if (empty($max_kode['kode_akun_2'])) {
+                $new_kode = $kode_akun_1 . '1';
+            } else {
+                $new_kode = (int)$max_kode['kode_akun_2'] + 1;
+            }
+        } else {
+            $new_kode = $akun2['kode_akun_2'];
+        }
+
         $this->akun2model->update($id, [
-            'id_akun_1' => $this->request->getPost('id_akun_1'),
-            'kode_akun_2' => $this->request->getPost('kode_akun_2'),
+            'id_akun_1' => $id_akun_1,
+            'kode_akun_2' => (string)$new_kode,
             'nama_akun_2' => $this->request->getPost('nama_akun_2')
         ]);
 
