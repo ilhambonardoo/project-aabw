@@ -166,34 +166,42 @@
                 </div>
             </li>
 
+            <?php 
+            $laporanPosisi = strpos($currentUri, 'laporan-posisi-keuangan') !== false;
+            $laporanKomprehensif = strpos($currentUri, 'laporan-komprehensif') !== false;
+            $laporanAsetNeto = strpos($currentUri, 'laporan-perubahan-aset-neto') !== false;
+            $laporanArus = strpos($currentUri, 'laporan-arus-kas') !== false;
+            $daftarLaporan = $laporanPosisi || $laporanKomprehensif || $laporanAsetNeto || $laporanArus
+            ?>
+
             <li class="nav-item">
-                <a href="#laporanKeuanganMenu" class="nav-link link-dark rounded-3 d-flex align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
+                <a href="#laporanKeuanganMenu" class="nav-link link-dark rounded-3 d-flex <?php echo $daftarLaporan ? 'active' : 'link-dark'; ?> align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
                     <i class="bi bi-file-earmark-text"></i>
                     <span>Laporan Keuangan</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-chevron-up ms-auto"></i>
                 </a>
-                <div class="collapse" id="laporanKeuanganMenu">
+                <div class="collapse <?php echo $daftarLaporan ? 'show' : ''; ?>" id="laporanKeuanganMenu">
                     <ul class="nav flex-column ms-3 mt-1 gap-1">
                         <li class="nav-item">
-                            <a href="/laporan-posisi-keuangan" class="nav-link <?php echo strpos($currentUri, 'laporan-posisi-keuangan') !== false ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/laporan-posisi-keuangan" class="nav-link <?php echo $laporanPosisi ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Laporan Posisi Keuangan</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/laporan-komprehensif" class="nav-link <?php echo strpos($currentUri, 'laporan-komprehensif') !== false ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/laporan-komprehensif" class="nav-link <?php echo $laporanKomprehensif ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Laporan Penghasilan Komprehensif</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link link-dark rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/laporan-perubahan-aset-neto" class="nav-link <?php echo $laporanAsetNeto ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Laporan Perubahan Aset Neto</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link link-dark rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="#" class="nav-link <?php echo $laporanArus ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Laporan Arus Kas</span>
                             </a>

@@ -90,3 +90,7 @@ $routes->get('/laporan-posisi-keuangan/cetak-pdf', 'LaporanPosisiKeuanganControl
 $routes->get('/laporan-komprehensif', 'LaporanKomprehensifController::index');
 $routes->get('/laporan-komprehensif/cetak-pdf', 'LaporanKomprehensifController::cetakPdf');
 
+// Routes untuk Laporan Perubahan Aset Neto
+$routes->get('/laporan-perubahan-aset-neto', 'LaporanPerubahanAsetNetoController::index');
+$routes->get('/laporan-perubahan-aset-neto/cetak-pdf', 'LaporanPerubahanAsetNetoController::cetakPdf');
+
