@@ -21,9 +21,10 @@
         .double-border { border-bottom: 3px double #000; }
         
         .footer { margin-top: 50px; width: 100%; }
-        .footer-table { border: none; }
-        .footer-table td { border: none; padding: 0; }
-        .signature-line { margin-top: 60px; border-top: 1px solid #000; width: 200px; display: inline-block; }
+        .footer-table { width: 100%; border: none !important; border-bottom: none !important; margin-top: 0; }
+        .footer-table td { border: none !important; padding: 0; vertical-align: top; }
+        .signature-box { width: 220px; float: end; text-align: center; }
+        .signature-line { margin-top: 75px; border-top: 1px solid #333; width: 100%; }
     </style>
 </head>
 <body>
@@ -121,11 +122,12 @@
     <div class="footer">
         <table class="footer-table">
             <tr>
-                <td width="70%"></td>
                 <td>
-                    Bogor, <?= date('d F Y') ?><br>
-                    Pimpinan Yayasan,<br><br><br>
-                    <div class="signature-line"></div>
+                    <div class="signature-box">
+                        Bogor, <?= date('d F Y') ?><br>
+                        Pimpinan Yayasan,<br><br><br>
+                        <div class="signature-line"></div>
+                    </div>
                 </td>
             </tr>
         </table>
