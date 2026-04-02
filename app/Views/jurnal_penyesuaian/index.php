@@ -12,7 +12,6 @@ Jurnal Penyesuaian
         </div>
     </div>
 
-    <!-- Filter Form -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
             <form method="get" class="row g-3 align-items-end">
@@ -41,17 +40,16 @@ Jurnal Penyesuaian
         </div>
     </div>
 
-    <!-- Jurnal Table -->
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
+                <thead class="table-dark">
                     <tr>
-                        <th class="text-muted small fw-600 ps-4">Tanggal</th>
-                        <th class="text-muted small fw-600">Keterangan</th>
-                        <th class="text-muted small fw-600">Ref</th>
-                        <th class="text-muted small fw-600 text-end pe-4">Debit (Rp)</th>
-                        <th class="text-muted small fw-600 text-end pe-4">Kredit (Rp)</th>
+                        <th class="text-white small fw-600 ps-4">Tanggal</th>
+                        <th class="text-white small fw-600">Keterangan</th>
+                        <th class="text-white small fw-600">Ref</th>
+                        <th class="text-white small fw-600 text-end pe-4">Debit (Rp)</th>
+                        <th class="text-white small fw-600 text-end pe-4">Kredit (Rp)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +61,6 @@ Jurnal Penyesuaian
                         </tr>
                     <?php else: ?>
                         <?php foreach ($jurnal as $noTransaksi => $transaksi): ?>
-                            <!-- Header Transaksi -->
                             <tr class="bg-light-secondary border-top">
                                 <td class="ps-4 fw-600 text-dark">
                                     <?= date('d/m/Y', strtotime($transaksi['tanggal'])) ?>
@@ -78,7 +75,6 @@ Jurnal Penyesuaian
                                 <td class="text-end pe-4"></td>
                             </tr>
                             
-                            <!-- Detail Akun -->
                             <?php foreach ($transaksi['details'] as $detail): ?>
                                 <tr>
                                     <td class="ps-4"></td>
@@ -97,13 +93,13 @@ Jurnal Penyesuaian
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </tbody>
-                <tfoot class="bg-light border-top border-top-2">
+                <tfoot class="table-dark border-top border-top-2">
                     <tr>
-                        <td colspan="3" class="ps-4 fw-600 text-dark">JUMLAH</td>
-                        <td class="text-end pe-4 fw-600 text-dark">
+                        <td colspan="3" class="ps-4 fw-600 text-white">JUMLAH</td>
+                        <td class="text-end pe-4 fw-600 text-white border border-white">
                             <?= number_format($totalDebit, 2, ',', '.') ?>
                         </td>
-                        <td class="text-end pe-4 fw-600 text-dark">
+                        <td class="text-end pe-4 fw-600 text-white border border-white">
                             <?= number_format($totalKredit, 2, ',', '.') ?>
                         </td>
                     </tr>
