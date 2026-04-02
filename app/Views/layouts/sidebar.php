@@ -181,7 +181,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link link-dark rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/laporan-komprehensif" class="nav-link <?php echo strpos($currentUri, 'laporan-komprehensif') !== false ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Laporan Penghasilan Komprehensif</span>
                             </a>
