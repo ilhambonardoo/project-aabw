@@ -48,7 +48,7 @@ class LaporanPerubahanAsetNetoController extends BaseController
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-        $dompdf->stream("Laporan_Perubahan_Aset_Neto_{$tgl_awal}_{$tgl_akhir}.pdf", ["Attachment" => true]);
+        $dompdf->stream("Laporan_Perubahan_Aset_Neto_{$tgl_awal}_{$tgl_akhir}.pdf", ["Attachment" => 0]);
     }
 
     private function getReportData($tgl_awal, $tgl_akhir)
