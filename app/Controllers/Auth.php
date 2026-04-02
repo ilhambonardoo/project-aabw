@@ -14,6 +14,9 @@ class Auth extends BaseController
     }
 
     public function register (){
+        if (session()->get('logged_in')) {
+            return redirect()->to('/dashboard');
+        }
         return view('auth/register_view');
     }
 
@@ -38,7 +41,7 @@ class Auth extends BaseController
             ];
 
             $this->model->save($data);
-            return redirect()->to('/login')->with('success', 'Akun berhasil dibuat');
+            return redirect()->to('/login')->with('message', 'Akun berhasil dibuat');
         } else {
             return redirect()->to('/register')->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -47,6 +50,9 @@ class Auth extends BaseController
 
     public function login()
     {
+        if (session()->get('logged_in')) {
+            return redirect()->to('/dashboard');
+        }
         return view('auth/login_view');
     }
 
@@ -61,17 +67,19 @@ class Auth extends BaseController
         if($user){
             if(password_verify($password, $user['password'])) {
                 $ses_data = [
-                    'id'            => $user['id'] ,
+                    'id'            => $user['id'],
                     'nama_pengguna' => $user['nama_pengguna'],
-                    'nama_lengkap' => $user['nama_lengkap'],
-                    'email'         => $user['email'] ,
-                    'nama_divisi' => $user['nama_divisi'],
+                    'nama_lengkap'  => $user['nama_lengkap'],
+                    'email'         => $user['email'],
+                    'role'          => $user['role'],
+                    'bidang'        => $user['bidang'],
+                    'nama_divisi'   => $user['nama_divisi'],
                     'logged_in'     => TRUE
                 ];
                 $session->set($ses_data);
                 return redirect()->to('/dashboard');
             } else{
-                $session->setFlashdata('error', 'Password yang Anda masukkan salah.');
+                $session->setFlashdata('error', 'Username atau Password yang Anda masukkan salah.');
                 return redirect()->to('/login');
             }
         } else {
