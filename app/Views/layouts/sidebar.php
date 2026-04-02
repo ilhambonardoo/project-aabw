@@ -201,7 +201,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link <?php echo $laporanArus ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
+                            <a href="/laporan-arus-kas" class="nav-link <?php echo $laporanArus ? 'active' : 'link-dark'; ?> rounded-2 d-flex align-items-center gap-2 px-3 py-2" style="font-size: 0.9rem; transition: all 0.3s ease;">
                                 <i class="bi bi-record2-fill"></i>
                                 <span>Laporan Arus Kas</span>
                             </a>
