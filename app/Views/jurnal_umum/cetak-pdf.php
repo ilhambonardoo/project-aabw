@@ -30,15 +30,6 @@
             </div>
         </div>
 
-        <div class="period-info">
-            <p>
-                <strong>Periode:</strong> 
-                <?= isset($tgl_awal) && $tgl_awal ? date('d F Y', strtotime($tgl_awal)) : 'Semua' ?> 
-                hingga 
-                <?= isset($tgl_akhir) && $tgl_akhir ? date('d F Y', strtotime($tgl_akhir)) : 'Semua' ?>
-            </p>
-        </div>
-
         <table>
             <thead>
                 <tr>
@@ -64,7 +55,6 @@
                             <td class="text-right"></td>
                         </tr>
 
-                        <!-- Detail Akun -->
                         <?php foreach ($transaksi['details'] as $detail): ?>
                             <tr class="detail-row">
                                 <td></td>
@@ -90,7 +80,6 @@
             </tfoot>
         </table>
 
-        <!-- Footer Signature -->
         <div class="footer">
             <div class="signature">
                 <div class="signature-date">
