@@ -86,3 +86,7 @@ $routes->get('/neraca-saldo-disesuaikan/cetak-pdf', 'NeracaSaldoDisesuaikanContr
 $routes->get('/laporan-posisi-keuangan', 'LaporanPosisiKeuanganController::index');
 $routes->get('/laporan-posisi-keuangan/cetak-pdf', 'LaporanPosisiKeuanganController::cetakPdf');
 
+// Routes untuk Laporan Penghasilan Komprehensif
+$routes->get('/laporan-komprehensif', 'LaporanKomprehensifController::index');
+$routes->get('/laporan-komprehensif/cetak-pdf', 'LaporanKomprehensifController::cetakPdf');
+
