@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/main') ?>
 
+<?= $this->section('title'); ?>
+Laporan Perubahan Aset Neto
+<?= $this->endSection(); ?>
+
 <?= $this->section('content') ?>
 <div class="container-fluid">
     <div class="row">
