@@ -30,11 +30,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 20%;">Tanggal</th>
-                            <th style="width: 35%;">Keterangan</th>
-                            <th style="width: 15%; text-align: right;">Debit</th>
-                            <th style="width: 15%; text-align: right;">Kredit</th>
-                            <th style="width: 15%; text-align: right;">Saldo</th>
+                            <th style="width: 15%;">Tanggal</th>
+                            <th style="width: 20%;">Nomor Transaksi</th>
+                            <th style="width: 25%;">Deskripsi</th>
+                            <th style="width: 13%; text-align: right;">Debit</th>
+                            <th style="width: 13%; text-align: right;">Kredit</th>
+                            <th style="width: 14%; text-align: right;">Saldo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +45,10 @@
                                     <?= date('d-m-Y', strtotime($transaksi['tanggal'])) ?>
                                 </td>
                                 <td>
-                                    <strong><?= esc($transaksi['no_transaksi']) ?></strong><br>
+                                    <strong><?= esc($transaksi['no_transaksi']) ?></strong>
+                                </td>
+                                <td>
+                                    <?= esc($transaksi['deskripsi']) ?>
                                 </td>
                                 <td class="text-right">
                                     <?php if ($transaksi['debit'] > 0): ?>
@@ -66,6 +70,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <td></td>
                             <td colspan="3" class="text-right"><strong>Saldo Akhir:</strong></td>
                             <td colspan="2" class="text-right">
                                 <strong class="amount">

@@ -62,6 +62,7 @@ Buku Besar
                                 <tr>
                                     <th class="py-2">Tanggal</th>
                                     <th class="py-2">Nomor Transaksi</th>
+                                    <th class="py-2">Deskripsi</th>
                                     <th class="py-2 text-center">Debit</th>
                                     <th class="py-2 text-center">Kredit</th>
                                     <th class="py-2 text-center">Saldo</th>
@@ -77,6 +78,9 @@ Buku Besar
                                             <small>
                                                 <strong><?= esc($transaksi['no_transaksi']) ?></strong><br>
                                             </small>
+                                        </td>
+                                        <td class="py-2">
+                                            <small><?= esc($transaksi['deskripsi']) ?></small>
                                         </td>
                                         <td class="py-2 text-center">
                                             <small>
@@ -106,13 +110,14 @@ Buku Besar
                             </tbody>
                             <tfoot>
                                 <tr class="table-light fw-bold">
-                                    <td colspan="3" class="py-2 text-end">Saldo Akhir:</td>
-                                    <td class="py-2 text-end">
+                                    <td colspan="3" class="px-2">Saldo Akhir:</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="py-2 px-5 text-center">
                                         <span class="badge bg-info">
                                             <?= number_format(abs($akun['saldo_akhir']), 2, ',', '.') ?>
                                         </span>
                                     </td>
-                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>
