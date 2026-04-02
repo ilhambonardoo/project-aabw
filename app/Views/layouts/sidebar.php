@@ -18,6 +18,7 @@
             <?php 
             $currentUri = uri_string();
             $dashboardActive = (strpos($currentUri, 'dashboard') !== false || $currentUri === '');
+            $userRole = session()->get('role');
             ?>
             <li class="nav-item">
                 <a href="/dashboard" class="nav-link <?php echo $dashboardActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2 fw-500" style="transition: all 0.3s ease;">
@@ -31,6 +32,9 @@
             $akun2Active = strpos($currentUri, 'akun2') !== false;
             $akun3Active = strpos($currentUri, 'akun3') !== false;
             $daftarAkunActive = $akun1Active || $akun2Active || $akun3Active;
+            
+            // Only Admin can see Account List
+            if ($userRole === 'Admin'):
             ?>
             <li class="nav-item">
                 <a href="#daftarAkunMenu" class="nav-link <?php echo $daftarAkunActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
@@ -61,6 +65,7 @@
                     </ul>
                 </div>
             </li>
+            <?php endif; ?>
 
             <li class="mt-3">
                 <span class="text-muted small fw-bold text-uppercase px-3">Siklus Akuntansi</span>
@@ -69,9 +74,11 @@
             <?php 
             $transaksiUmum = strpos($currentUri, 'transaksi-umum') !== false;
             $transaksiPenyesuaian = strpos($currentUri, 'transaksi-penyesuaian') !== false;
-            $daftarTransaksiActive = $transaksiUmum || $transaksiPenyesuaian
-            ?>
+            $daftarTransaksiActive = $transaksiUmum || $transaksiPenyesuaian;
 
+            // Admin and Bendahara can see Transactions
+            if (in_array($userRole, ['Admin', 'Bendahara Yayasan', 'Bendahara Pendidikan', 'Bendahara Majelis Talim'])):
+            ?>
             <li class="nav-item">
                 <a href="#daftarTransaksiMenu" class="nav-link link-dark rounded-3 d-flex align-items-center <?php echo $daftarTransaksiActive ? 'active' : 'link-dark'; ?> gap-3 px-3 py-2 submenu-toggle" style="transition: all 0.3s ease;" data-bs-toggle="collapse">
                     <i class="bi bi-arrow-left-right"></i>
@@ -96,6 +103,7 @@
 
                 </div>
             </li>
+            <?php endif; ?>
 
             <?php 
                 $jurnalUmumActive = strpos($currentUri, 'jurnal-umum') !== false;
@@ -221,22 +229,22 @@
                     <i class="bi bi-person-circle text-success"></i>
                 </div>
                 <div class="flex-grow-1 min-w-0">
-                    <div class="text-dark fw-600 small text-truncate">Bendahara</div>
-                    <div class="text-muted small text-truncate">Yayasan</div>
+                    <div class="text-dark fw-600 small text-truncate"><?php echo session()->get('role'); ?></div>
+                    <div class="text-muted small text-truncate"><?php echo ucfirst(str_replace('_', ' ', session()->get('bidang') ?? 'Yayasan')); ?></div>
                 </div>
                 <i class="bi bi-chevron-down text-muted small"></i>
             </button>
             <ul class="dropdown-menu w-100" style="min-width: 200px;">
                 <li>
                     <a class="dropdown-item d-flex align-items-center gap-2" href="#">
-                        <i class="bi bi-person"></i> Profil
+                        <i class="bi bi-person"></i> <?php echo session()->get('username'); ?>
                     </a>
                 </li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
                 <li>
-                    <a class="dropdown-item d-flex align-items-center gap-2" href="#">
+                    <a class="dropdown-item d-flex align-items-center gap-2" href="/logout">
                         <i class="bi bi-box-arrow-right text-danger"></i> Logout
                     </a>
                 </li>
