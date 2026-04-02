@@ -28,15 +28,6 @@
                 <p>Periode: <?= isset($tgl_awal) && $tgl_awal ? date('d/m/Y', strtotime($tgl_awal)) : 'Semua' ?> s/d <?= isset($tgl_akhir) && $tgl_akhir ? date('d/m/Y', strtotime($tgl_akhir)) : 'Semua' ?></p>
             </div>
         </div>
-
-        <div class="period-info">
-            <p>
-                <strong>Periode:</strong> 
-                <?= isset($tgl_awal) && $tgl_awal ? date('d F Y', strtotime($tgl_awal)) : 'Semua' ?> 
-                hingga 
-                <?= isset($tgl_akhir) && $tgl_akhir ? date('d F Y', strtotime($tgl_akhir)) : 'Semua' ?>
-            </p>
-        </div>
         
         <table>
             <thead>
