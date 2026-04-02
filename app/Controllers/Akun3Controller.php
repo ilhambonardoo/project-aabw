@@ -18,11 +18,16 @@ class Akun3Controller extends BaseController
 
     public function index()
     {
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
+
         $data = [
             'title' => 'Master Akun 3 (Detail/Rincian)',
-            'akun3' => $this->akun3model->getAkun3Complete(),
+            'akun3' => ($role === 'Admin' || $bidang === 'Semua') 
+                        ? $this->akun3model->getAkun3Complete() 
+                        : $this->akun3model->getAkun3Complete($bidang),
         ];
-        
+
         return view('akun3/index', $data);
     }
 
@@ -41,13 +46,6 @@ class Akun3Controller extends BaseController
                 'label' => 'Induk Golongan',
                 'rules' => 'required|integer'
             ],
-            'kode_akun_3' => [
-                'label' => 'Kode Akun 3',
-                'rules' => 'required|numeric|is_unique[akun_3.kode_akun_3]',
-                'errors' => [
-                    'is_unique' => '{field} sudah terdaftar dalam sistem'
-                ]
-            ],
             'nama_akun_3' => [
                 'label' => 'Nama Akun 3',
                 'rules' => 'required|min_length[3]|max_length[100]'
@@ -55,6 +53,10 @@ class Akun3Controller extends BaseController
             'saldo_normal' => [
                 'label' => 'Saldo Normal',
                 'rules' => 'required|in_list[Debit,Kredit]'
+            ],
+            'bidang' => [
+                'label' => 'Bidang',
+                'rules' => 'required|in_list[Yayasan,Pendidikan,Majelis_Talim]'
             ]
         ];
 
@@ -62,11 +64,29 @@ class Akun3Controller extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $id_akun_2 = $this->request->getPost('id_akun_2');
+        $akun2 = $this->akun2model->find($id_akun_2);
+        
+        if (!$akun2) {
+            return redirect()->back()->withInput()->with('error', 'Akun 2 tidak ditemukan.');
+        }
+
+        $kode_akun_2 = $akun2['kode_akun_2'];
+
+        $max_kode = $this->akun3model->where('id_akun_2', $id_akun_2)->selectMax('kode_akun_3')->first();
+
+        if (empty($max_kode['kode_akun_3'])) {
+            $new_kode = $kode_akun_2 . '01';
+        } else {
+            $new_kode = (int)$max_kode['kode_akun_3'] + 1;
+        }
+
         $this->akun3model->save([
-            'id_akun_2'    => $this->request->getPost('id_akun_2'),
-            'kode_akun_3'  => $this->request->getPost('kode_akun_3'),
+            'id_akun_2'    => $id_akun_2,
+            'kode_akun_3'  => (string)$new_kode,
             'nama_akun_3'  => $this->request->getPost('nama_akun_3'),
-            'saldo_normal' => $this->request->getPost('saldo_normal')
+            'saldo_normal' => $this->request->getPost('saldo_normal'),
+            'bidang'       => $this->request->getPost('bidang')
         ]);
 
         return redirect()->to('/akun3')->with('success', 'Data Akun 3 berhasil ditambahkan!');
@@ -100,13 +120,6 @@ class Akun3Controller extends BaseController
                 'label' => 'Induk Golongan',
                 'rules' => 'required|integer'
             ],
-            'kode_akun_3' => [
-                'label' => 'Kode Akun 3',
-                'rules' => 'required|numeric|is_unique[akun_3.kode_akun_3,id,' . $id . ']',
-                'errors' => [
-                    'is_unique' => '{field} sudah terdaftar dalam sistem'
-                ]
-            ],
             'nama_akun_3' => [
                 'label' => 'Nama Akun 3',
                 'rules' => 'required|min_length[3]|max_length[100]'
@@ -121,9 +134,27 @@ class Akun3Controller extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $id_akun_2 = $this->request->getPost('id_akun_2');
+        $akun2 = $this->akun2model->find($id_akun_2);
+        
+        if (!$akun2) {
+            return redirect()->back()->withInput()->with('error', 'Akun 2 tidak ditemukan.');
+        }
+
+        if ($akun3['id_akun_2'] != $id_akun_2) {
+            $max_kode = $this->akun3model->where('id_akun_2', $id_akun_2)->selectMax('kode_akun_3')->first();
+            if (empty($max_kode['kode_akun_3'])) {
+                $new_kode = $akun2['kode_akun_2'] . '01';
+            } else {
+                $new_kode = (int)$max_kode['kode_akun_3'] + 1;
+            }
+        } else {
+            $new_kode = $akun3['kode_akun_3'];
+        }
+
         $this->akun3model->update($id, [
-            'id_akun_2'    => $this->request->getPost('id_akun_2'),
-            'kode_akun_3'  => $this->request->getPost('kode_akun_3'),
+            'id_akun_2'    => $id_akun_2,
+            'kode_akun_3'  => (string)$new_kode,
             'nama_akun_3'  => $this->request->getPost('nama_akun_3'),
             'saldo_normal' => $this->request->getPost('saldo_normal')
         ]);
