@@ -59,20 +59,28 @@ class NeracaSaldoDisesuaikanController extends BaseController
 
     private function getNeraceData($bulan, $tahun)
     {
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
         $db = \Config\Database::connect();
 
         $tanggalAwal = $tahun . '-' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '-01';
         $tanggalAkhir = date('Y-m-t', strtotime($tanggalAwal));
 
-        $result = $db->table('akun_3 a')
+        $builder = $db->table('akun_3 a')
             ->select('a.id, a.kode_akun_3, a.nama_akun_3, 
                      COALESCE(SUM(dt.debit), 0) as total_debit,
                      COALESCE(SUM(dt.kredit), 0) as total_kredit')
             ->join('detail_transaksi dt', 'a.id = dt.id_akun_3', 'left')
             ->join('transaksi t', 'dt.id_transaksi = t.id', 'left')
             ->where('t.tanggal >=', $tanggalAwal)
-            ->where('t.tanggal <=', $tanggalAkhir)
-            ->groupBy('a.id, a.kode_akun_3, a.nama_akun_3')
+            ->where('t.tanggal <=', $tanggalAkhir);
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $builder->where('t.bidang', $bidang);
+            $builder->where('a.bidang', $bidang);
+        }
+
+        $result = $builder->groupBy('a.id, a.kode_akun_3, a.nama_akun_3')
             ->orderBy('a.kode_akun_3', 'ASC')
             ->get()
             ->getResultArray();
