@@ -23,12 +23,20 @@ class TransaksiUmumController extends BaseController
     {
         $tgl_awal = $this->request->getGet('tgl_awal');
         $tgl_akhir = $this->request->getGet('tgl_akhir');
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
 
-        if($tgl_awal && $tgl_akhir){
-            $transaksi = $this->transaksiModel->where('jenis_transaksi', 'umum')->where('tanggal >=', $tgl_awal)->where('tanggal <=', $tgl_akhir)->orderBy('tanggal', 'DESC')->findAll();
-        } else {
-            $transaksi = $this->transaksiModel->where('jenis_transaksi', 'umum')->orderBy('tanggal', 'DESC')->findAll();
+        $query = $this->transaksiModel->where('jenis_transaksi', 'umum');
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $query->where('bidang', $bidang);
         }
+
+        if ($tgl_awal && $tgl_akhir) {
+            $query->where('tanggal >=', $tgl_awal)->where('tanggal <=', $tgl_akhir);
+        }
+
+        $transaksi = $query->orderBy('tanggal', 'DESC')->findAll();
 
         $data = [
             'title' => 'Data Transaksi Umum',
@@ -71,10 +79,20 @@ class TransaksiUmumController extends BaseController
 
     public function create(){
         $noTransaksiSekarang = $this->generateNoTransaksi(date('Y-m-d'));
+        
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
+
+        if ($role === 'Admin') {
+            $akun3 = $this->akun3Model->findAll();
+        } else {
+            $akun3 = $this->akun3Model->where('bidang', $bidang)->findAll();
+        }
+
         $data = [
             'title'              => 'Tambah Transaksi Umum',
             'no_transaksi'       => $noTransaksiSekarang,
-            'akun3'              => $this->akun3Model->findAll(),
+            'akun3'              => $akun3,
         ];
 
         return view('transaksi_umum/create', $data);
@@ -85,10 +103,12 @@ class TransaksiUmumController extends BaseController
         $tanggal = $this->request->getPost('tanggal');
         
         $noTransaksi = $this->generateNoTransaksi($tanggal);
+        $bidang = session()->get('bidang') ?: 'Yayasan'; // Default fallback
 
         $this->transaksiModel->save([
             'no_transaksi'      => $noTransaksi,
             'jenis_transaksi'   => 'Umum',
+            'bidang'            => $bidang,
             'tanggal'           => $tanggal,
             'deskripsi'         => $this->request->getPost('deskripsi'),
             'keterangan_jurnal' => $this->request->getPost('keterangan_jurnal'),
