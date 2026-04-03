@@ -12,7 +12,7 @@ class TransaksiModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['no_transaksi', 'jenis_transaksi', 'bidang', 'tanggal', 'deskripsi', 'keterangan_jurnal', 'nilai_perolehan', 'masa_manfaat', 'nilai_penyesuaian'];
+    protected $allowedFields = ['no_transaksi', 'jenis_transaksi', 'tanggal', 'deskripsi', 'keterangan_jurnal', 'nilai_perolehan', 'masa_manfaat', 'nilai_penyesuaian'];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
