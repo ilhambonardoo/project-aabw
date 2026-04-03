@@ -39,6 +39,7 @@ Tambah Akun 3
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <small class="text-muted">Kode Akun 3 akan otomatis dihasilkan berdasarkan pilihan Induk Golongan.</small>
                 <?php if (session('errors.id_akun_2')): ?>
                     <div class="invalid-feedback d-block">
                         <?= session('errors.id_akun_2') ?>
@@ -48,12 +49,16 @@ Tambah Akun 3
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="kode_akun_3" class="form-label fw-semibold">Kode Akun 3</label>
-                    <input type="number" class="form-control <?= session('errors.kode_akun_3') ? 'is-invalid' : '' ?>" id="kode_akun_3" name="kode_akun_3" placeholder="Contoh: 1110" value="<?= old('kode_akun_3') ?>" required>
-                    <small class="text-muted">Awali dengan kode Akun 2</small>
-                    <?php if (session('errors.kode_akun_3')): ?>
+                    <label for="bidang" class="form-label fw-semibold">Bidang</label>
+                    <select class="form-select <?= session('errors.bidang') ? 'is-invalid' : '' ?>" id="bidang" name="bidang" required>
+                        <option value="" selected disabled>-- Pilih Bidang --</option>
+                        <option value="Yayasan" <?= old('bidang') === 'Yayasan' ? 'selected' : '' ?>>Yayasan</option>
+                        <option value="Pendidikan" <?= old('bidang') === 'Pendidikan' ? 'selected' : '' ?>>Pendidikan</option>
+                        <option value="Majelis_Talim" <?= old('bidang') === 'Majelis_Talim' ? 'selected' : '' ?>>Majelis Ta'lim</option>
+                    </select>
+                    <?php if (session('errors.bidang')): ?>
                         <div class="invalid-feedback d-block">
-                            <?= session('errors.kode_akun_3') ?>
+                            <?= session('errors.bidang') ?>
                         </div>
                     <?php endif; ?>
                 </div>
