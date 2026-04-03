@@ -56,9 +56,7 @@ class LaporanArusKasController extends BaseController
 
     private function getReportData($tgl_awal, $tgl_akhir)
     {
-        // ARUS KAS HANYA MENGHITUNG TRANSAKSI YANG MELIBATKAN KAS (1101) DAN BANK (1102)
 
-        // 1. AKTIVITAS OPERASI
         $kas_infaq = $this->getCashFlowByType('4102', $tgl_awal, $tgl_akhir);
         $kas_spp = $this->getCashFlowByType('4101', $tgl_awal, $tgl_akhir);
         $total_penerimaan_ops = $kas_infaq + $kas_spp;
@@ -66,11 +64,9 @@ class LaporanArusKasController extends BaseController
         $kas_beban = $this->getCashFlowByType('5', $tgl_awal, $tgl_akhir, ['5106']);
         $arus_kas_ops = $total_penerimaan_ops - abs($kas_beban);
 
-        // 2. AKTIVITAS INVESTASI
         $kas_investasi = $this->getCashFlowByType('12', $tgl_awal, $tgl_akhir, ['1202']);
         $arus_kas_investasi = $kas_investasi;
 
-        // 3. AKTIVITAS PENDANAAN
         $kas_pendanaan = $this->getCashFlowByType('4201', $tgl_awal, $tgl_akhir);
         $arus_kas_pendanaan = $kas_pendanaan;
 
@@ -96,17 +92,24 @@ class LaporanArusKasController extends BaseController
 
     private function getCashFlowByType($prefix_lawan, $tgl_awal, $tgl_akhir, $exclude = [])
     {
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
         $db = \Config\Database::connect();
-        
-        $subquery = $db->table('detail_transaksi d')
+
+        $subqueryBuilder = $db->table('detail_transaksi d')
             ->select('d.id_transaksi')
             ->join('akun_3 a', 'a.id = d.id_akun_3')
             ->join('transaksi t', 't.id = d.id_transaksi')
             ->whereIn('a.kode_akun_3', ['1101', '1102'])
             ->where('t.tanggal >=', $tgl_awal)
-            ->where('t.tanggal <=', $tgl_akhir)
-            ->get()
-            ->getResultArray();
+            ->where('t.tanggal <=', $tgl_akhir);
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $subqueryBuilder->where('t.bidang', $bidang);
+            $subqueryBuilder->where('a.bidang', $bidang);
+        }
+
+        $subquery = $subqueryBuilder->get()->getResultArray();
 
         if (empty($subquery)) return 0;
         $id_transaksi_list = array_column($subquery, 'id_transaksi');
@@ -116,6 +119,10 @@ class LaporanArusKasController extends BaseController
             ->join('akun_3 a', 'a.id = d.id_akun_3')
             ->whereIn('d.id_transaksi', $id_transaksi_list)
             ->whereNotIn('a.kode_akun_3', ['1101', '1102']);
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $builder->where('a.bidang', $bidang);
+        }
 
         if (is_array($prefix_lawan)) {
             $builder->groupStart();
