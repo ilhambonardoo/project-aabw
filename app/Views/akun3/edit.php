@@ -39,6 +39,7 @@ Edit Akun 3
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <small class="text-muted">Jika anda mengubah Induk Golongan, Kode Akun 3 akan otomatis dihasilkan ulang.</small>
                 <?php if (session('errors.id_akun_2')): ?>
                     <div class="invalid-feedback d-block">
                         <?= session('errors.id_akun_2') ?>
@@ -47,17 +48,6 @@ Edit Akun 3
             </div>
 
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="kode_akun_3" class="form-label fw-semibold">Kode Akun 3</label>
-                    <input type="number" class="form-control <?= session('errors.kode_akun_3') ? 'is-invalid' : '' ?>" id="kode_akun_3" name="kode_akun_3" placeholder="Contoh: 1110" value="<?= old('kode_akun_3', $akun3['kode_akun_3']) ?>" required>
-                    <small class="text-muted">Awali dengan kode Akun 2</small>
-                    <?php if (session('errors.kode_akun_3')): ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.kode_akun_3') ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                
                 <div class="col-md-6 mb-3">
                     <label for="saldo_normal" class="form-label fw-semibold">Saldo Normal</label>
                     <select class="form-select <?= session('errors.saldo_normal') ? 'is-invalid' : '' ?>" id="saldo_normal" name="saldo_normal" required>
