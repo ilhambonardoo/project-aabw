@@ -39,6 +39,7 @@ Edit Akun 2
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <small class="text-muted">Jika anda mengubah Induk Klasifikasi, Kode Akun 2 akan otomatis dihasilkan ulang.</small>
                 <?php if (session('errors.id_akun_1')): ?>
                     <div class="invalid-feedback d-block">
                         <?= session('errors.id_akun_1') ?>
@@ -46,17 +47,6 @@ Edit Akun 2
                 <?php endif; ?>
             </div>
 
-            <div class="mb-3">
-                <label for="kode_akun_2" class="form-label fw-semibold">Kode Akun 2</label>
-                <input type="number" class="form-control <?= session('errors.kode_akun_2') ? 'is-invalid' : '' ?>" id="kode_akun_2" name="kode_akun_2" placeholder="Contoh: 11" value="<?= old('kode_akun_2', $akun2['kode_akun_2']) ?>" required>
-                <small class="text-muted">Gunakan dua digit berawalan kode Akun 1 (misal: 11, 12, 21, 41)</small>
-                <?php if (session('errors.kode_akun_2')): ?>
-                    <div class="invalid-feedback d-block">
-                        <?= session('errors.kode_akun_2') ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-            
             <div class="mb-4">
                 <label for="nama_akun_2" class="form-label fw-semibold">Nama Golongan</label>
                 <input type="text" class="form-control <?= session('errors.nama_akun_2') ? 'is-invalid' : '' ?>" id="nama_akun_2" name="nama_akun_2" placeholder="Contoh: Aset Lancar" value="<?= old('nama_akun_2', $akun2['nama_akun_2']) ?>" required>

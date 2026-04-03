@@ -26,6 +26,7 @@ Akun 3 (Detail)
                 <thead class="table-success" style="border-bottom: 2px solid #198754;">
                     <tr>
                         <th class="px-4 py-3">Kode Akun 3</th>
+                        <th class="py-3">Bidang</th>
                         <th class="py-3">Akun 1</th>
                         <th class="py-3">Akun 2</th>
                         <th class="py-3">Akun 3</th>
@@ -36,7 +37,7 @@ Akun 3 (Detail)
                 <tbody>
                     <?php if (empty($akun3)) : ?>
                         <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">
+                            <td colspan="7" class="text-center py-4 text-muted">
                                 <i class="bi bi-inbox fs-2 d-block mb-2"></i>
                                 Belum ada data. Silakan tambah data baru.
                             </td>
@@ -45,6 +46,11 @@ Akun 3 (Detail)
                         <?php foreach ($akun3 as $row) : ?>
                             <tr>
                                 <td class="px-4 py-3 align-middle fw-bold text-success"><?= esc($row['kode_akun_3']) ?></td>
+                                <td class="py-3 align-middle">
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary border">
+                                        <?= esc(str_replace('_', ' ', $row['bidang'] ?? '-')) ?>
+                                    </span>
+                                </td>
                                 <td class="py-3 align-middle text-muted"><?= esc($row['nama_akun_1']); ?></td>
                                 <td class="py-3 align-middle text-muted">
                                     <?= esc($row['nama_akun_2']) ?>

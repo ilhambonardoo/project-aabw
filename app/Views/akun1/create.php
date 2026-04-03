@@ -31,7 +31,7 @@ Tambah Akun 1
             
             <div class="mb-3">
                 <label for="kode_akun_1" class="form-label fw-semibold">Kode Akun 1</label>
-                <input type="number" class="form-control <?= session('errors.kode_akun_1') ? 'is-invalid' : '' ?>" id="kode_akun_1" name="kode_akun_1" placeholder="Contoh: 1" value="<?= old('kode_akun_1') ?>" required autofocus>
+                <input type="number" min="1" max="5" class="form-control <?= session('errors.kode_akun_1') ? 'is-invalid' : '' ?>" id="kode_akun_1" name="kode_akun_1" placeholder="Contoh: 1" value="<?= old('kode_akun_1') ?>" required autofocus>
                 <small class="text-muted">Gunakan angka tunggal (1, 2, 3, 4, 5)</small>
                 <?php if (session('errors.kode_akun_1')): ?>
                     <div class="invalid-feedback d-block">

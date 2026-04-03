@@ -33,8 +33,10 @@ class Akun1Controller extends BaseController
         $rules = [
             'kode_akun_1' => [
                 'label' => 'Kode Akun 1',
-                'rules' => 'required|numeric|is_unique[akun_1.kode_akun_1]',
+                'rules' => 'required|numeric|greater_than_equal_to[1]|less_than_equal_to[5]|is_unique[akun_1.kode_akun_1]',
                 'errors' => [
+                    'greater_than_equal_to' => '{field} tidak boleh kurang dari 1',
+                    'less_than_equal_to' => '{field} tidak boleh lebih dari 5',
                     'is_unique' => '{field} sudah terdaftar dalam sistem'
                 ]
             ],
@@ -83,9 +85,11 @@ class Akun1Controller extends BaseController
         $rules = [
             'kode_akun_1' => [
                 'label' => 'Kode Akun 1',
-                'rules' => 'required|numeric|is_unique[akun_1.kode_akun_1,id,' . $id . ']',
+                'rules' => 'required|numeric|greater_than_equal_to[1]|less_than_equal_to[5]|is_unique[akun_1.kode_akun_1,id,' . $id . ']',
                 'errors' => [
-                    'is_unique' => '{field} sudah terdaftar dalam sistem'
+                    'is_unique' => '{field} sudah terdaftar dalam sistem',
+                    'greater_than_equal_to' => '{field} tidak boleh kurang dari 1',
+                    'less_than_equal_to' => '{field} tidak boleh lebih dari 5'
                 ]
             ],
             'nama_akun_1' => [

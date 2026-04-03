@@ -12,7 +12,7 @@ class Akun3Model extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_akun_2', 'kode_akun_3', 'nama_akun_3', 'saldo_normal'];
+    protected $allowedFields    = ['id_akun_2', 'kode_akun_3', 'nama_akun_3', 'saldo_normal', 'bidang'];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
@@ -43,11 +43,16 @@ class Akun3Model extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getAkun3Complete()
+    public function getAkun3Complete($bidang = null)
     {
-        return $this->select('akun_3.*, akun_2.nama_akun_2, akun_1.nama_akun_1')
+        $builder = $this->select('akun_3.*, akun_2.nama_akun_2, akun_1.nama_akun_1')
                     ->join('akun_2', 'akun_2.id = akun_3.id_akun_2')
-                    ->join('akun_1', 'akun_1.id = akun_2.id_akun_1')
-                    ->findAll();
+                    ->join('akun_1', 'akun_1.id = akun_2.id_akun_1');
+
+        if ($bidang && $bidang !== 'Semua') {
+            $builder->where('akun_3.bidang', $bidang);
+        }
+
+        return $builder->findAll();
     }
 }
