@@ -14,6 +14,9 @@ $routes->post('register/process', 'Auth::registerProcess');
 $routes->get('logout', 'Auth::logout');
 
 $routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
+$routes->get('/profile', 'ProfileController::index', ['filter' => 'auth']);
+$routes->post('/profile/update', 'ProfileController::updateProfile', ['filter' => 'auth']);
+$routes->post('/profile/update-password', 'ProfileController::updatePassword', ['filter' => 'auth']);
 
 $adminOnly = ['filter' => 'auth:Admin'];
 $inputRole = ['filter' => 'auth:Admin,Bendahara Yayasan,Bendahara Pendidikan,Bendahara Majelis Talim'];
