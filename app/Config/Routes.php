@@ -23,6 +23,13 @@ $inputRole = ['filter' => 'auth:Admin,Bendahara Yayasan,Bendahara Pendidikan,Ben
 $viewOnlyRole = ['filter' => 'auth:Admin,Ketua Yayasan,Bendahara Yayasan,Kepala Sekolah,Bendahara Pendidikan,Ketua Majelis Talim,Bendahara Majelis Talim'];
 
 $routes->group('', $adminOnly, function($routes) {
+    $routes->get('/users', 'UserController::index');
+    $routes->get('/users/create', 'UserController::create');
+    $routes->post('/users/store', 'UserController::store');
+    $routes->get('/users/edit/(:num)', 'UserController::edit/$1');
+    $routes->post('/users/update/(:num)', 'UserController::update/$1');
+    $routes->get('/users/delete/(:num)', 'UserController::delete/$1');
+
     $routes->get('/akun1', "Akun1Controller::index");
     $routes->get('/akun1/create', "Akun1Controller::create");
     $routes->post('/akun1/store', "Akun1Controller::store");
