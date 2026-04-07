@@ -29,22 +29,36 @@ Edit Akun 3
         <form action="/akun3/update/<?= esc($akun3['id']) ?>" method="POST">
             <?= csrf_field() ?>
             
-            <div class="mb-3">
-                <label for="id_akun_2" class="form-label fw-semibold">Pilih Induk Golongan (Akun 2)</label>
-                <select class="form-select <?= session('errors.id_akun_2') ? 'is-invalid' : '' ?>" id="id_akun_2" name="id_akun_2" required>
-                    <option value="" disabled>-- Pilih Akun 2 --</option>
-                    <?php foreach($akun2 as $row): ?>
-                        <option value="<?= esc($row['id']) ?>" <?= old('id_akun_2', $akun3['id_akun_2']) == $row['id'] ? 'selected' : '' ?>>
-                            <?= esc($row['nama_akun_1']) ?> &raquo; <?= esc($row['kode_akun_2']) ?> - <?= esc($row['nama_akun_2']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <small class="text-muted">Jika anda mengubah Induk Golongan, Kode Akun 3 akan otomatis dihasilkan ulang.</small>
-                <?php if (session('errors.id_akun_2')): ?>
-                    <div class="invalid-feedback d-block">
-                        <?= session('errors.id_akun_2') ?>
-                    </div>
-                <?php endif; ?>
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <label for="id_akun_2" class="form-label fw-semibold">Pilih Induk Golongan (Akun 2)</label>
+                    <select class="form-select <?= session('errors.id_akun_2') ? 'is-invalid' : '' ?>" id="id_akun_2" name="id_akun_2" required>
+                        <option value="" disabled>-- Pilih Akun 2 --</option>
+                        <?php foreach($akun2 as $row): ?>
+                            <option value="<?= esc($row['id']) ?>" <?= old('id_akun_2', $akun3['id_akun_2']) == $row['id'] ? 'selected' : '' ?>>
+                                <?= esc($row['nama_akun_1']) ?> &raquo; <?= esc($row['kode_akun_2']) ?> - <?= esc($row['nama_akun_2']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if (session('errors.id_akun_2')): ?>
+                        <div class="invalid-feedback d-block">
+                            <?= session('errors.id_akun_2') ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="kode_akun_3" class="form-label fw-semibold">2 Digit Terakhir</label>
+                    <?php 
+                        // Ambil 2 digit terakhir dari kode_akun_3 eksisting jika ada
+                        $lastTwoDigits = substr($akun3['kode_akun_3'], -2); 
+                    ?>
+                    <input type="text" maxlength="2" class="form-control <?= session('errors.kode_akun_3') ? 'is-invalid' : '' ?>" id="kode_akun_3" name="kode_akun_3" placeholder="01" value="<?= old('kode_akun_3', $lastTwoDigits) ?>" required onkeypress="return /[0-9]/.test(event.key)">
+                    <?php if (session('errors.kode_akun_3')): ?>
+                        <div class="invalid-feedback d-block">
+                            <?= session('errors.kode_akun_3') ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="row">
