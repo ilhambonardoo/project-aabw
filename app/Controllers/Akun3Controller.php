@@ -46,6 +46,10 @@ class Akun3Controller extends BaseController
                 'label' => 'Induk Golongan',
                 'rules' => 'required|integer'
             ],
+            'kode_akun_3' => [
+                'label' => 'Kode Akun 3',
+                'rules' => 'required|exact_length[2]|numeric'
+            ],
             'nama_akun_3' => [
                 'label' => 'Nama Akun 3',
                 'rules' => 'required|min_length[3]|max_length[100]'
@@ -65,25 +69,22 @@ class Akun3Controller extends BaseController
         }
 
         $id_akun_2 = $this->request->getPost('id_akun_2');
+        $kode_dua_digit = $this->request->getPost('kode_akun_3');
         $akun2 = $this->akun2model->find($id_akun_2);
         
         if (!$akun2) {
             return redirect()->back()->withInput()->with('error', 'Akun 2 tidak ditemukan.');
         }
 
-        $kode_akun_2 = $akun2['kode_akun_2'];
+        $new_kode = $akun2['kode_akun_2'] . $kode_dua_digit;
 
-        $max_kode = $this->akun3model->where('id_akun_2', $id_akun_2)->selectMax('kode_akun_3')->first();
-
-        if (empty($max_kode['kode_akun_3'])) {
-            $new_kode = $kode_akun_2 . '01';
-        } else {
-            $new_kode = (int)$max_kode['kode_akun_3'] + 1;
+        if ($this->akun3model->where('kode_akun_3', $new_kode)->first()) {
+            return redirect()->back()->withInput()->with('errors', ['kode_akun_3' => 'Kode Akun 3 tersebut sudah digunakan.']);
         }
 
         $this->akun3model->save([
             'id_akun_2'    => $id_akun_2,
-            'kode_akun_3'  => (string)$new_kode,
+            'kode_akun_3'  => $new_kode,
             'nama_akun_3'  => $this->request->getPost('nama_akun_3'),
             'saldo_normal' => $this->request->getPost('saldo_normal'),
             'bidang'       => $this->request->getPost('bidang')
@@ -120,6 +121,10 @@ class Akun3Controller extends BaseController
                 'label' => 'Induk Golongan',
                 'rules' => 'required|integer'
             ],
+            'kode_akun_3' => [
+                'label' => 'Kode Akun 3',
+                'rules' => 'required|exact_length[2]|numeric'
+            ],
             'nama_akun_3' => [
                 'label' => 'Nama Akun 3',
                 'rules' => 'required|min_length[3]|max_length[100]'
@@ -135,26 +140,23 @@ class Akun3Controller extends BaseController
         }
 
         $id_akun_2 = $this->request->getPost('id_akun_2');
+        $kode_dua_digit = $this->request->getPost('kode_akun_3');
         $akun2 = $this->akun2model->find($id_akun_2);
         
         if (!$akun2) {
             return redirect()->back()->withInput()->with('error', 'Akun 2 tidak ditemukan.');
         }
 
-        if ($akun3['id_akun_2'] != $id_akun_2) {
-            $max_kode = $this->akun3model->where('id_akun_2', $id_akun_2)->selectMax('kode_akun_3')->first();
-            if (empty($max_kode['kode_akun_3'])) {
-                $new_kode = $akun2['kode_akun_2'] . '01';
-            } else {
-                $new_kode = (int)$max_kode['kode_akun_3'] + 1;
-            }
-        } else {
-            $new_kode = $akun3['kode_akun_3'];
+        $new_kode = $akun2['kode_akun_2'] . $kode_dua_digit;
+
+        $existing = $this->akun3model->where('kode_akun_3', $new_kode)->where('id !=', $id)->first();
+        if ($existing) {
+            return redirect()->back()->withInput()->with('errors', ['kode_akun_3' => 'Kode Akun 3 tersebut sudah digunakan oleh akun lain.']);
         }
 
         $this->akun3model->update($id, [
             'id_akun_2'    => $id_akun_2,
-            'kode_akun_3'  => (string)$new_kode,
+            'kode_akun_3'  => $new_kode,
             'nama_akun_3'  => $this->request->getPost('nama_akun_3'),
             'saldo_normal' => $this->request->getPost('saldo_normal')
         ]);

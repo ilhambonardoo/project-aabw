@@ -55,16 +55,12 @@ class LaporanKomprehensifController extends BaseController
     {
 
         
-        // Pendapatan Tanpa Pembatasan (Misal: 41xx)
         $pendapatan_tanpa_pembatasan = $this->getSumAkunByPrefix('41', $tgl_awal, $tgl_akhir);
         
-        // Pendapatan Dengan Pembatasan (Misal: 42xx)
         $pendapatan_dengan_pembatasan = $this->getSumAkunByPrefix('42', $tgl_awal, $tgl_akhir);
         
-        // Beban (Misal: 5xxx atau 6xxx)
         $beban = $this->getSumAkunByPrefix(['5', '6'], $tgl_awal, $tgl_akhir);
 
-        // Perhitungan
         $total_pendapatan_tanpa = array_sum(array_column($pendapatan_tanpa_pembatasan, 'total'));
         $total_beban = array_sum(array_column($beban, 'total'));
         
@@ -93,18 +89,26 @@ class LaporanKomprehensifController extends BaseController
 
     private function getSumAkunByPrefix($prefixes, $tgl_awal, $tgl_akhir)
     {
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
+
         if (!is_array($prefixes)) {
             $prefixes = [$prefixes];
         }
 
         $builder = $this->detailTransaksiModel->builder();
-        $builder->select('akun_3.kode_akun_3, akun_3.nama_akun_3, akun_3.saldo_normal');
+        $builder->select('akun_3.kode_akun_3, akun_3.nama_akun_3, akun_3.saldo_normal, akun_3.bidang');
         $builder->selectSum('debit');
         $builder->selectSum('kredit');
         $builder->join('akun_3', 'akun_3.id = detail_transaksi.id_akun_3');
         $builder->join('transaksi', 'transaksi.id = detail_transaksi.id_transaksi');
         $builder->where('transaksi.tanggal >=', $tgl_awal);
         $builder->where('transaksi.tanggal <=', $tgl_akhir);
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $builder->where('transaksi.bidang', $bidang);
+            $builder->where('akun_3.bidang', $bidang);
+        }
         
         $builder->groupStart();
         foreach ($prefixes as $prefix) {

@@ -176,9 +176,9 @@ main.sidebar-hidden {
 }
 
 .dropdown-item:hover {
-  background-color: rgba(40, 167, 69, 0.1);
   color: #28a745;
   transform: translateX(4px);
+  width: calc(60% - 2px);
 }
 
 .text-uppercase {

@@ -28,6 +28,19 @@
             </li>
 
             <?php 
+            $usersActive = strpos($currentUri, 'users') !== false;
+            
+            if ($userRole === 'Admin'):
+            ?>
+            <li class="nav-item">
+                <a href="/users" class="nav-link <?php echo $usersActive ? 'active' : 'link-dark'; ?> rounded-3 d-flex align-items-center gap-3 px-3 py-2 fw-500" style="transition: all 0.3s ease;">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Manajemen User</span>
+                </a>
+            </li>
+            <?php endif; ?>
+
+            <?php 
             $akun1Active = strpos($currentUri, 'akun1') !== false;
             $akun2Active = strpos($currentUri, 'akun2') !== false;
             $akun3Active = strpos($currentUri, 'akun3') !== false;
@@ -236,8 +249,8 @@
             </button>
             <ul class="dropdown-menu w-100" style="min-width: 200px;">
                 <li>
-                    <a class="dropdown-item d-flex align-items-center gap-2" href="#">
-                        <i class="bi bi-person"></i> <?php echo session()->get('username'); ?>
+                    <a class="dropdown-item d-flex align-items-center gap-2" href="/profile">
+                        <i class="bi bi-person"></i> Profil Saya
                     </a>
                 </li>
                 <li>
