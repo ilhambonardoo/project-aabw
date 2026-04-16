@@ -12,13 +12,6 @@ class BukuBesarController extends BaseController
         $tanggalAwal = $this->request->getGet('tanggal_awal');
         $tanggalAkhir = $this->request->getGet('tanggal_akhir');
 
-        if (!$tanggalAwal) {
-            $tanggalAwal = date('Y-01-01');
-        }
-        if (!$tanggalAkhir) {
-            $tanggalAkhir = date('Y-m-d');
-        }
-
         $bukuBesar = $this->getBukuBesarData($tanggalAwal, $tanggalAkhir);
 
         $data = [
@@ -34,13 +27,6 @@ class BukuBesarController extends BaseController
     {
         $tanggalAwal = $this->request->getGet('tanggal_awal');
         $tanggalAkhir = $this->request->getGet('tanggal_akhir');
-
-        if (!$tanggalAwal) {
-            $tanggalAwal = date('Y-01-01');
-        }
-        if (!$tanggalAkhir) {
-            $tanggalAkhir = date('Y-m-d');
-        }
 
         $bukuBesar = $this->getBukuBesarData($tanggalAwal, $tanggalAkhir);
 
@@ -79,9 +65,14 @@ class BukuBesarController extends BaseController
                      dt.debit, dt.kredit, dt.id_akun_3')
             ->join('transaksi t', 't.id = dt.id_transaksi', 'left')
             ->join('akun_3 a3', 'a3.id = dt.id_akun_3', 'left')
-            ->where('t.jenis_transaksi', 'Umum')
-            ->where('t.tanggal >=', $tanggalAwal)
-            ->where('t.tanggal <=', $tanggalAkhir);
+            ->where('t.jenis_transaksi', 'Umum');
+
+        if ($tanggalAwal) {
+            $builder->where('t.tanggal >=', $tanggalAwal);
+        }
+        if ($tanggalAkhir) {
+            $builder->where('t.tanggal <=', $tanggalAkhir);
+        }
 
         if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
             $builder->where('t.bidang', $bidang);

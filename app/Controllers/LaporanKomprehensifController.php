@@ -20,8 +20,15 @@ class LaporanKomprehensifController extends BaseController
 
     public function index()
     {
-        $tgl_awal = $this->request->getGet('tgl_awal') ?? date('Y-m-01');
-        $tgl_akhir = $this->request->getGet('tgl_akhir') ?? date('Y-m-t');
+        $tgl_awal = $this->request->getGet('tgl_awal');
+        $tgl_akhir = $this->request->getGet('tgl_akhir');
+
+        if (!$tgl_awal) {
+            $tgl_awal = date('Y-01-01');
+        }
+        if (!$tgl_akhir) {
+            $tgl_akhir = date('Y-m-d');
+        }
 
         $data = $this->getReportData($tgl_awal, $tgl_akhir);
         $data['tgl_awal'] = $tgl_awal;
@@ -32,8 +39,15 @@ class LaporanKomprehensifController extends BaseController
 
     public function cetakPdf()
     {
-        $tgl_awal = $this->request->getGet('tgl_awal') ?? date('Y-m-01');
-        $tgl_akhir = $this->request->getGet('tgl_akhir') ?? date('Y-m-t');
+        $tgl_awal = $this->request->getGet('tgl_awal');
+        $tgl_akhir = $this->request->getGet('tgl_akhir');
+
+        if (!$tgl_awal) {
+            $tgl_awal = date('Y-01-01');
+        }
+        if (!$tgl_akhir) {
+            $tgl_akhir = date('Y-m-d');
+        }
 
         $data = $this->getReportData($tgl_awal, $tgl_akhir);
         $data['tgl_awal'] = $tgl_awal;
@@ -104,6 +118,8 @@ class LaporanKomprehensifController extends BaseController
         $builder->join('transaksi', 'transaksi.id = detail_transaksi.id_transaksi');
         $builder->where('transaksi.tanggal >=', $tgl_awal);
         $builder->where('transaksi.tanggal <=', $tgl_akhir);
+        // Menghapus filter jenis_transaksi agar mencakup 'Umum' dan 'Penyesuaian'
+        // $builder->whereIn('transaksi.jenis_transaksi', ['Umum', 'Penyesuaian']); 
 
         if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
             $builder->where('transaksi.bidang', $bidang);

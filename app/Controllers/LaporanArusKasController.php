@@ -56,92 +56,69 @@ class LaporanArusKasController extends BaseController
 
     private function getReportData($tgl_awal, $tgl_akhir)
     {
+        // 1. Aktivitas Operasi (Penerimaan & Pengeluaran)
+        $penerimaan_ops = $this->getCashFlowByStatus(['Penerimaan'], $tgl_awal, $tgl_akhir);
+        $pengeluaran_ops = $this->getCashFlowByStatus(['Pengeluaran'], $tgl_awal, $tgl_akhir);
+        $total_penerimaan_ops = $penerimaan_ops;
+        $total_pengeluaran_ops = abs($pengeluaran_ops);
+        $arus_kas_ops = $total_penerimaan_ops - $total_pengeluaran_ops;
 
-        $kas_infaq = $this->getCashFlowByType('4102', $tgl_awal, $tgl_akhir);
-        $kas_spp = $this->getCashFlowByType('4101', $tgl_awal, $tgl_akhir);
-        $total_penerimaan_ops = $kas_infaq + $kas_spp;
+        // 2. Aktivitas Investasi (Investasi Masuk & Investasi Keluar)
+        $investasi_masuk = $this->getCashFlowByStatus(['Investasi Masuk'], $tgl_awal, $tgl_akhir);
+        $investasi_keluar = $this->getCashFlowByStatus(['Investasi Keluar'], $tgl_awal, $tgl_akhir);
+        $arus_kas_investasi = $investasi_masuk - abs($investasi_keluar);
 
-        $kas_beban = $this->getCashFlowByType('5', $tgl_awal, $tgl_akhir, ['5106']);
-        $arus_kas_ops = $total_penerimaan_ops - abs($kas_beban);
-
-        $kas_investasi = $this->getCashFlowByType('12', $tgl_awal, $tgl_akhir, ['1202']);
-        $arus_kas_investasi = $kas_investasi;
-
-        $kas_pendanaan = $this->getCashFlowByType('4201', $tgl_awal, $tgl_akhir);
-        $arus_kas_pendanaan = $kas_pendanaan;
+        // 3. Aktivitas Pendanaan (Pendanaan Masuk & Pendanaan Keluar)
+        $pendanaan_masuk = $this->getCashFlowByStatus(['Pendanaan Masuk'], $tgl_awal, $tgl_akhir);
+        $pendanaan_keluar = $this->getCashFlowByStatus(['Pendanaan Keluar'], $tgl_awal, $tgl_akhir);
+        $arus_kas_pendanaan = $pendanaan_masuk - abs($pendanaan_keluar);
 
         return [
             'ops' => [
-                'infaq' => $kas_infaq,
-                'spp' => $kas_spp,
-                'total_penerimaan' => $total_penerimaan_ops,
-                'beban' => abs($kas_beban),
+                'penerimaan' => $total_penerimaan_ops,
+                'pengeluaran' => $total_pengeluaran_ops,
                 'total_arus_kas' => $arus_kas_ops
             ],
             'inv' => [
-                'pembelian' => abs($kas_investasi),
+                'investasi_masuk' => $investasi_masuk,
+                'investasi_keluar' => abs($investasi_keluar),
                 'total_arus_kas' => $arus_kas_investasi
             ],
             'fin' => [
-                'pembangunan' => $kas_pendanaan,
+                'pendanaan_masuk' => $pendanaan_masuk,
+                'pendanaan_keluar' => abs($pendanaan_keluar),
                 'total_arus_kas' => $arus_kas_pendanaan
             ]
         ];
     }
 
-
-    private function getCashFlowByType($prefix_lawan, $tgl_awal, $tgl_akhir, $exclude = [])
+    private function getCashFlowByStatus($statuses, $tgl_awal, $tgl_akhir)
     {
         $role = session()->get('role');
         $bidang = session()->get('bidang');
         $db = \Config\Database::connect();
 
-        $subqueryBuilder = $db->table('detail_transaksi d')
-            ->select('d.id_transaksi')
-            ->join('akun_3 a', 'a.id = d.id_akun_3')
-            ->join('transaksi t', 't.id = d.id_transaksi')
-            ->whereIn('a.kode_akun_3', ['1101', '1102'])
+        $builder = $db->table('detail_transaksi dt')
+            ->select('dt.debit, dt.kredit, a3.saldo_normal')
+            ->join('transaksi t', 't.id = dt.id_transaksi')
+            ->join('akun_3 a3', 'a3.id = dt.id_akun_3')
+            ->whereIn('dt.status', $statuses)
             ->where('t.tanggal >=', $tgl_awal)
             ->where('t.tanggal <=', $tgl_akhir);
 
         if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
-            $subqueryBuilder->where('t.bidang', $bidang);
-            $subqueryBuilder->where('a.bidang', $bidang);
-        }
-
-        $subquery = $subqueryBuilder->get()->getResultArray();
-
-        if (empty($subquery)) return 0;
-        $id_transaksi_list = array_column($subquery, 'id_transaksi');
-
-        $builder = $db->table('detail_transaksi d')
-            ->select('a.saldo_normal, d.debit, d.kredit')
-            ->join('akun_3 a', 'a.id = d.id_akun_3')
-            ->whereIn('d.id_transaksi', $id_transaksi_list)
-            ->whereNotIn('a.kode_akun_3', ['1101', '1102']);
-
-        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
-            $builder->where('a.bidang', $bidang);
-        }
-
-        if (is_array($prefix_lawan)) {
-            $builder->groupStart();
-            foreach ($prefix_lawan as $p) {
-                $builder->orLike('a.kode_akun_3', $p, 'after');
-            }
-            $builder->groupEnd();
-        } else {
-            $builder->like('a.kode_akun_3', $prefix_lawan, 'after');
-        }
-
-        if (!empty($exclude)) {
-            $builder->whereNotIn('a.kode_akun_3', $exclude);
+            $builder->where('t.bidang', $bidang);
         }
 
         $results = $builder->get()->getResultArray();
 
         $total = 0;
         foreach ($results as $row) {
+            // Kita ingin melihat arus kas yang masuk/keluar dari sisi KAS (1101/1102)
+            // Namun karena kita memfilter berdasarkan status pada detail transaksi lawan kas (pendapatan/beban/aset),
+            // maka kita hitung dampaknya terhadap kas.
+            // Jika akun lawan berada di kredit (pendapatan/masuk), maka kas bertambah (positif).
+            // Jika akun lawan berada di debit (beban/keluar), maka kas berkurang (negatif).
             $total += ($row['kredit'] - $row['debit']);
         }
 
