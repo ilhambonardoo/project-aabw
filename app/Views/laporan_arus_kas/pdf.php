@@ -55,28 +55,12 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td class="indent-2">Penerimaan</td>
-                    <td></td>
+                    <td class="indent-2">Penerimaan Arus Kas</td>
+                    <td class="text-right"><?= number_format($ops['penerimaan'], 2, ',', '.') ?></td>
                 </tr>
                 <tr>
-                    <td class="indent-3">Kas dari Sumbangan – Infaq</td>
-                    <td class="text-right"><?= number_format($ops['infaq'], 2, ',', '.') ?></td>
-                </tr>
-                <tr>
-                    <td class="indent-3">Kas dari Pendapatan SPP</td>
-                    <td class="text-right"><?= number_format($ops['spp'], 2, ',', '.') ?></td>
-                </tr>
-                <tr>
-                    <td class="bold indent-2">Total Penerimaan</td>
-                    <td class="text-right bold"><?= number_format($ops['total_penerimaan'], 2, ',', '.') ?></td>
-                </tr>
-                <tr>
-                    <td class="indent-2 pt-2">Pengeluaran</td>
-                    <td class="pt-2"></td>
-                </tr>
-                <tr>
-                    <td class="indent-3">Pembayaran kas untuk beban</td>
-                    <td class="text-right text-danger">(<?= number_format($ops['beban'], 2, ',', '.') ?>)</td>
+                    <td class="indent-2">Pengeluaran Arus Kas</td>
+                    <td class="text-right text-danger">(<?= number_format($ops['pengeluaran'], 2, ',', '.') ?>)</td>
                 </tr>
                 <tr class="total-row">
                     <td class="bold indent-1">Arus Kas dari Aktivitas Operasi</td>
@@ -89,8 +73,12 @@
                     <td class="section-gap"></td>
                 </tr>
                 <tr>
-                    <td class="indent-2">Pembelian Aset Tetap</td>
-                    <td class="text-right text-danger">(<?= number_format($inv['pembelian'], 2, ',', '.') ?>)</td>
+                    <td class="indent-2">Investasi Masuk</td>
+                    <td class="text-right"><?= number_format($inv['investasi_masuk'], 2, ',', '.') ?></td>
+                </tr>
+                <tr>
+                    <td class="indent-2">Investasi Keluar</td>
+                    <td class="text-right text-danger">(<?= number_format($inv['investasi_keluar'], 2, ',', '.') ?>)</td>
                 </tr>
                 <tr class="total-row">
                     <td class="bold indent-1">Arus Kas dari Aktivitas Investasi</td>
@@ -103,8 +91,12 @@
                     <td class="section-gap"></td>
                 </tr>
                 <tr>
-                    <td class="indent-2">Penerimaan dari pendapatan yang dibatasi untuk : pembangunan Gedung yayasan</td>
-                    <td class="text-right"><?= number_format($fin['pembangunan'], 2, ',', '.') ?></td>
+                    <td class="indent-2">Pendanaan Masuk</td>
+                    <td class="text-right"><?= number_format($fin['pendanaan_masuk'], 2, ',', '.') ?></td>
+                </tr>
+                <tr>
+                    <td class="indent-2">Pendanaan Keluar</td>
+                    <td class="text-right text-danger">(<?= number_format($fin['pendanaan_keluar'], 2, ',', '.') ?>)</td>
                 </tr>
                 <tr class="total-row">
                     <td class="bold indent-1">Arus Kas dari Aktivitas Pendanaan</td>
