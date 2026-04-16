@@ -29,12 +29,10 @@ Jurnal Umum
                     <button type="submit" class="btn btn-sm btn-primary me-2">
                         <i class="bi bi-search"></i> Tampilkan
                     </button>
-                    <?php if ($tgl_awal && $tgl_akhir): ?>
-                        <a href="/jurnal-umum/cetak-pdf?tgl_awal=<?= urlencode($tgl_awal) ?>&tgl_akhir=<?= urlencode($tgl_akhir) ?>" 
-                            class="btn btn-sm btn-danger" target="_blank">
-                            <i class="bi bi-file-pdf"></i> Cetak PDF
-                        </a>
-                    <?php endif; ?>
+                    <a href="/jurnal-umum/cetak-pdf?tgl_awal=<?= urlencode($tgl_awal ?? '') ?>&tgl_akhir=<?= urlencode($tgl_akhir ?? '') ?>" 
+                        class="btn btn-sm btn-danger" target="_blank">
+                        <i class="bi bi-file-pdf"></i> Cetak PDF
+                    </a>
                 </div>
             </form>
         </div>
