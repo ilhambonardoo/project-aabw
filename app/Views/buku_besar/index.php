@@ -22,12 +22,12 @@ Buku Besar
             <div class="col-md-4">
                 <label for="tanggal_awal" class="form-label fw-semibold">Tanggal Awal:</label>
                 <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" 
-                       value="<?= esc($tanggalAwal) ?>" required>
+                       value="<?= esc($tanggalAwal) ?>">
             </div>
             <div class="col-md-4">
                 <label for="tanggal_akhir" class="form-label fw-semibold">Tanggal Akhir:</label>
                 <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" 
-                       value="<?= esc($tanggalAkhir) ?>" required>
+                       value="<?= esc($tanggalAkhir) ?>">
             </div>
             <div class="col-md-4 d-flex gap-2">
                 <button type="submit" class="btn btn-primary shadow-sm flex-grow-1">
