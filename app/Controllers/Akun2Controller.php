@@ -105,13 +105,6 @@ class Akun2Controller extends BaseController
                 'label' => 'Induk Klasifikasi',
                 'rules' => 'required|integer'
             ],
-            'kode_akun_2' => [
-                'label' => 'Kode Akun 2',
-                'rules' => 'required|numeric|is_unique[akun_2.kode_akun_2,id,' . $id . ']',
-                'errors' => [
-                    'is_unique' => '{field} sudah terdaftar dalam sistem'
-                ]
-            ],
             'nama_akun_2' => [
                 'label' => 'Nama Akun 2',
                 'rules' => 'required|min_length[3]|max_length[100]'
