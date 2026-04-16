@@ -46,7 +46,7 @@ Tambah Transaksi Penyesuaian
                         <small class="text-muted d-block">Contoh: 12</small>
                     </div>
                     <div class="col-md-4">
-                        <label>Nilai Penyesuaian <span class="text-muted">(Otomatis)</span></label>
+                        <label>Nilai Penyesuaian <span class="text-muted">(Panduan)</span></label>
                         <input type="text" class="form-control text-end" id="nilaiPenyesuaian" name="nilai_penyesuaian" placeholder="Rp 0" readonly style="background-color: #e9ecef;">
                         <small class="text-muted d-block">Dihitung otomatis = Nilai Perolehan ÷ Masa Manfaat</small>
                     </div>

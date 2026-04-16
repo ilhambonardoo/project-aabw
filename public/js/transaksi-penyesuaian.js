@@ -62,38 +62,16 @@ function hitungPenyesuaian() {
     nilaiPenyesuaianEl.value = "Rp 0";
   }
 
-  updateSemuaBarisJurnal(nilaiPenyesuaian);
+  // updateSemuaBarisJurnal(nilaiPenyesuaian); // Dinonaktifkan agar tidak otomatis mengisi baris yang sudah ada
 }
 
 function updateSemuaBarisJurnal(nilaiPenyesuaian) {
+  // Dinonaktifkan agar tidak otomatis mengisi debit/kredit
+  /*
   document.querySelectorAll(".baris-jurnal").forEach((row) => {
-    const selectAkun = row.querySelector(".select-akun");
-    const inputDebit = row.querySelector(".input-debit");
-    const inputKredit = row.querySelector(".input-kredit");
-
-    const selectedOption = selectAkun.options[selectAkun.selectedIndex];
-    const saldo = selectedOption.dataset.saldo;
-
-    if (!saldo || nilaiPenyesuaian === 0) {
-      inputDebit.value = "0";
-      inputKredit.value = "0";
-      return;
-    }
-
-    const rupiahValue = "Rp " + formatRupiahInput(nilaiPenyesuaian.toString());
-
-    if (saldo === "Debit") {
-      inputDebit.value = rupiahValue;
-      inputKredit.value = "0";
-    } else if (saldo === "Kredit") {
-      inputKredit.value = rupiahValue;
-      inputDebit.value = "0";
-    } else {
-      inputDebit.value = "0";
-      inputKredit.value = "0";
-    }
+    ...
   });
-
+  */
   hitungTotal();
 }
 
@@ -152,29 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener("change", function (e) {
     if (e.target.classList.contains("select-akun")) {
-      const row = e.target.closest(".baris-jurnal");
-      const inputDebit = row.querySelector(".input-debit");
-      const inputKredit = row.querySelector(".input-kredit");
-      const selectedOption = e.target.options[e.target.selectedIndex];
-      const saldo = selectedOption.dataset.saldo;
-
-      const nilaiPenyesuaian = parseRupiah(
-        document.getElementById("nilaiPenyesuaian").value,
-      );
-      const rupiahValue =
-        "Rp " + formatRupiahInput(nilaiPenyesuaian.toString());
-
-      if (saldo === "Debit") {
-        inputDebit.value = nilaiPenyesuaian > 0 ? rupiahValue : "0";
-        inputKredit.value = "0";
-      } else if (saldo === "Kredit") {
-        inputKredit.value = nilaiPenyesuaian > 0 ? rupiahValue : "0";
-        inputDebit.value = "0";
-      } else {
-        inputDebit.value = "0";
-        inputKredit.value = "0";
-      }
-
+      // Logic pengisian otomatis debit/kredit saat pilih akun telah dihapus
+      // Agar pengguna dapat mengisi secara manual
       hitungTotal();
     }
   });
