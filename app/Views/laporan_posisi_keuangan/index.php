@@ -18,12 +18,12 @@ Laporan Posisi Keuangan
                 <div class="col-md-3">
                     <label for="tgl_awal" class="form-label text-muted small fw-600">Tanggal Awal</label>
                     <input type="date" class="form-control form-control-sm" id="tgl_awal" name="tgl_awal" 
-                        value="<?= $tgl_awal ?>" required>
+                        value="<?= $tgl_awal ?>">
                 </div>
                 <div class="col-md-3">
                     <label for="tgl_akhir" class="form-label text-muted small fw-600">Tanggal Akhir</label>
                     <input type="date" class="form-control form-control-sm" id="tgl_akhir" name="tgl_akhir" 
-                        value="<?= $tgl_akhir ?>" required>
+                        value="<?= $tgl_akhir ?>">
                 </div>
                 <div class="col-md-6">
                     <button type="submit" class="btn btn-sm btn-primary me-2">

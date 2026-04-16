@@ -9,8 +9,15 @@ class LaporanPosisiKeuanganController extends BaseController
 {
     public function index()
     {
-        $tgl_awal = $this->request->getGet('tgl_awal') ?? date('Y-m-01');
-        $tgl_akhir = $this->request->getGet('tgl_akhir') ?? date('Y-m-t');
+        $tgl_awal = $this->request->getGet('tgl_awal');
+        $tgl_akhir = $this->request->getGet('tgl_akhir');
+
+        if (!$tgl_awal) {
+            $tgl_awal = date('Y-01-01');
+        }
+        if (!$tgl_akhir) {
+            $tgl_akhir = date('Y-m-d');
+        }
 
         $laporan = $this->generateLaporanData($tgl_awal, $tgl_akhir);
 
@@ -74,8 +81,14 @@ class LaporanPosisiKeuanganController extends BaseController
             ->join('akun_2 a2', 'a2.id = a3.id_akun_2', 'left')
             ->join('akun_1 a1', 'a1.id = a2.id_akun_1', 'left')
             ->join('detail_transaksi dt', 'a3.id = dt.id_akun_3', 'left')
-            ->join('transaksi t', 't.id = dt.id_transaksi', 'left')
-            ->where('t.tanggal <=', $tgl_akhir);
+            ->join('transaksi t', 't.id = dt.id_transaksi', 'left');
+
+        if ($tgl_awal) {
+            $akun3Builder->where('t.tanggal >=', $tgl_awal);
+        }
+        if ($tgl_akhir) {
+            $akun3Builder->where('t.tanggal <=', $tgl_akhir);
+        }
 
         if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
             $akun3Builder->where('t.bidang', $bidang);
