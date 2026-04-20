@@ -10,7 +10,7 @@
                     <span class="fw-semibold"><?= session()->get('nama_lengkap'); ?></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow">
-                    <li><a class="dropdown-item" href="/profil">Profil</a></li>
+                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
                 </ul>

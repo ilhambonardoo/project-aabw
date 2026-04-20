@@ -57,28 +57,12 @@ Laporan Arus Kas
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-5 text-secondary">Penerimaan</td>
-                                    <td></td>
+                                    <td class="ps-5" style="padding-left: 60px !important;">Penerimaan Arus Kas</td>
+                                    <td class="text-end pe-4"><?= number_format($ops['penerimaan'], 2, ',', '.') ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-5" style="padding-left: 60px !important;">Kas dari Sumbangan – Infaq</td>
-                                    <td class="text-end pe-4"><?= number_format($ops['infaq'], 2, ',', '.') ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-5" style="padding-left: 60px !important;">Kas dari Pendapatan SPP</td>
-                                    <td class="text-end pe-4"><?= number_format($ops['spp'], 2, ',', '.') ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-5"><strong>Total Penerimaan</strong></td>
-                                    <td class="text-end pe-4"><strong><?= number_format($ops['total_penerimaan'], 2, ',', '.') ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-5 text-secondary pt-3">Pengeluaran</td>
-                                    <td class="pt-3"></td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-5" style="padding-left: 60px !important;">Pembayaran kas untuk beban</td>
-                                    <td class="text-end pe-4">(<?= number_format($ops['beban'], 2, ',', '.') ?>)</td>
+                                    <td class="ps-5" style="padding-left: 60px !important;">Pengeluaran Arus Kas</td>
+                                    <td class="text-end pe-4">(<?= number_format($ops['pengeluaran'], 2, ',', '.') ?>)</td>
                                 </tr>
                                 <tr class="table-light">
                                     <td class="ps-4"><strong>Arus Kas dari Aktivitas Operasi</strong></td>
@@ -91,8 +75,12 @@ Laporan Arus Kas
                                     <td class="pt-5"></td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-5">Pembelian Aset Tetap</td>
-                                    <td class="text-end pe-4">(<?= number_format($inv['pembelian'], 2, ',', '.') ?>)</td>
+                                    <td class="ps-5" style="padding-left: 60px !important;">Investasi Masuk</td>
+                                    <td class="text-end pe-4"><?= number_format($inv['investasi_masuk'], 2, ',', '.') ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-5" style="padding-left: 60px !important;">Investasi Keluar</td>
+                                    <td class="text-end pe-4">(<?= number_format($inv['investasi_keluar'], 2, ',', '.') ?>)</td>
                                 </tr>
                                 <tr class="table-light">
                                     <td class="ps-4"><strong>Arus Kas dari Aktivitas Investasi</strong></td>
@@ -105,8 +93,12 @@ Laporan Arus Kas
                                     <td class="pt-5"></td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-5">Penerimaan dari pendapatan yang dibatasi untuk : pembangunan Gedung yayasan</td>
-                                    <td class="text-end pe-4"><?= number_format($fin['pembangunan'], 2, ',', '.') ?></td>
+                                    <td class="ps-5" style="padding-left: 60px !important;">Pendanaan Masuk</td>
+                                    <td class="text-end pe-4"><?= number_format($fin['pendanaan_masuk'], 2, ',', '.') ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-5" style="padding-left: 60px !important;">Pendanaan Keluar</td>
+                                    <td class="text-end pe-4">(<?= number_format($fin['pendanaan_keluar'], 2, ',', '.') ?>)</td>
                                 </tr>
                                 <tr class="table-light">
                                     <td class="ps-4"><strong>Arus Kas dari Aktivitas Pendanaan</strong></td>

@@ -9,8 +9,15 @@ class LaporanPosisiKeuanganController extends BaseController
 {
     public function index()
     {
-        $tgl_awal = $this->request->getGet('tgl_awal') ?? date('Y-m-01');
-        $tgl_akhir = $this->request->getGet('tgl_akhir') ?? date('Y-m-t');
+        $tgl_awal = $this->request->getGet('tgl_awal');
+        $tgl_akhir = $this->request->getGet('tgl_akhir');
+
+        if (!$tgl_awal) {
+            $tgl_awal = date('Y-01-01');
+        }
+        if (!$tgl_akhir) {
+            $tgl_akhir = date('Y-m-d');
+        }
 
         $laporan = $this->generateLaporanData($tgl_awal, $tgl_akhir);
 
@@ -61,9 +68,11 @@ class LaporanPosisiKeuanganController extends BaseController
 
     private function generateLaporanData($tgl_awal, $tgl_akhir)
     {
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
         $db = \Config\Database::connect();
 
-        $akun3Totals = $db->table('akun_3 a3')
+        $akun3Builder = $db->table('akun_3 a3')
             ->select('a3.id, a3.kode_akun_3, a3.nama_akun_3,
                      a2.id_akun_1, a2.kode_akun_2, a2.nama_akun_2,
                      a1.kode_akun_1, a1.nama_akun_1,
@@ -72,14 +81,26 @@ class LaporanPosisiKeuanganController extends BaseController
             ->join('akun_2 a2', 'a2.id = a3.id_akun_2', 'left')
             ->join('akun_1 a1', 'a1.id = a2.id_akun_1', 'left')
             ->join('detail_transaksi dt', 'a3.id = dt.id_akun_3', 'left')
-            ->join('transaksi t', 't.id = dt.id_transaksi', 'left')
-            ->where('t.tanggal <=', $tgl_akhir)
-            ->groupBy('a3.id, a3.kode_akun_3, a3.nama_akun_3, a2.id_akun_1, a2.kode_akun_2, a2.nama_akun_2, a1.kode_akun_1, a1.nama_akun_1')
+            ->join('transaksi t', 't.id = dt.id_transaksi', 'left');
+
+        if ($tgl_awal) {
+            $akun3Builder->where('t.tanggal >=', $tgl_awal);
+        }
+        if ($tgl_akhir) {
+            $akun3Builder->where('t.tanggal <=', $tgl_akhir);
+        }
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $akun3Builder->where('t.bidang', $bidang);
+            $akun3Builder->where('a3.bidang', $bidang);
+        }
+
+        $akun3Totals = $akun3Builder->groupBy('a3.id, a3.kode_akun_3, a3.nama_akun_3, a2.id_akun_1, a2.kode_akun_2, a2.nama_akun_2, a1.kode_akun_1, a1.nama_akun_1')
             ->orderBy('a1.kode_akun_1, a2.kode_akun_2, a3.kode_akun_3', 'ASC')
             ->get()
             ->getResultArray();
 
-        $hasil_usaha = $db->table('akun_3 a3')
+        $hasilUsahaBuilder = $db->table('akun_3 a3')
             ->select('a1.kode_akun_1, COALESCE(SUM(dt.debit), 0) as total_debit, COALESCE(SUM(dt.kredit), 0) as total_kredit')
             ->join('akun_2 a2', 'a2.id = a3.id_akun_2', 'left')
             ->join('akun_1 a1', 'a1.id = a2.id_akun_1', 'left')
@@ -87,8 +108,14 @@ class LaporanPosisiKeuanganController extends BaseController
             ->join('transaksi t', 't.id = dt.id_transaksi', 'left')
             ->where('t.tanggal >=', $tgl_awal)
             ->where('t.tanggal <=', $tgl_akhir)
-            ->whereIn('a1.kode_akun_1', ['4', '5'])
-            ->groupBy('a1.id')
+            ->whereIn('a1.kode_akun_1', ['4', '5']);
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $hasilUsahaBuilder->where('t.bidang', $bidang);
+            $hasilUsahaBuilder->where('a3.bidang', $bidang);
+        }
+
+        $hasil_usaha = $hasilUsahaBuilder->groupBy('a1.id')
             ->get()
             ->getResultArray();
 

@@ -12,13 +12,6 @@ class BukuBesarController extends BaseController
         $tanggalAwal = $this->request->getGet('tanggal_awal');
         $tanggalAkhir = $this->request->getGet('tanggal_akhir');
 
-        if (!$tanggalAwal) {
-            $tanggalAwal = date('Y-01-01');
-        }
-        if (!$tanggalAkhir) {
-            $tanggalAkhir = date('Y-m-d');
-        }
-
         $bukuBesar = $this->getBukuBesarData($tanggalAwal, $tanggalAkhir);
 
         $data = [
@@ -34,13 +27,6 @@ class BukuBesarController extends BaseController
     {
         $tanggalAwal = $this->request->getGet('tanggal_awal');
         $tanggalAkhir = $this->request->getGet('tanggal_akhir');
-
-        if (!$tanggalAwal) {
-            $tanggalAwal = date('Y-01-01');
-        }
-        if (!$tanggalAkhir) {
-            $tanggalAkhir = date('Y-m-d');
-        }
 
         $bukuBesar = $this->getBukuBesarData($tanggalAwal, $tanggalAkhir);
 
@@ -69,19 +55,31 @@ class BukuBesarController extends BaseController
 
     private function getBukuBesarData($tanggalAwal, $tanggalAkhir)
     {
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
         $db = \Config\Database::connect();
         $builder = $db->table('detail_transaksi dt');
 
-        $result = $builder
-            ->select('t.id as transaksi_id, t.no_transaksi, t.tanggal, t.deskripsi, 
+        $builder->select('t.id as transaksi_id, t.no_transaksi, t.tanggal, t.deskripsi, 
                      a3.id as akun_3_id, a3.kode_akun_3, a3.nama_akun_3, a3.saldo_normal,
                      dt.debit, dt.kredit, dt.id_akun_3')
             ->join('transaksi t', 't.id = dt.id_transaksi', 'left')
             ->join('akun_3 a3', 'a3.id = dt.id_akun_3', 'left')
-            ->where('t.jenis_transaksi', 'Umum')
-            ->where('t.tanggal >=', $tanggalAwal)
-            ->where('t.tanggal <=', $tanggalAkhir)
-            ->orderBy('a3.kode_akun_3', 'ASC')
+            ->where('t.jenis_transaksi', 'Umum');
+
+        if ($tanggalAwal) {
+            $builder->where('t.tanggal >=', $tanggalAwal);
+        }
+        if ($tanggalAkhir) {
+            $builder->where('t.tanggal <=', $tanggalAkhir);
+        }
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $builder->where('t.bidang', $bidang);
+            $builder->where('a3.bidang', $bidang);
+        }
+
+        $result = $builder->orderBy('a3.kode_akun_3', 'ASC')
             ->orderBy('t.tanggal', 'ASC')
             ->orderBy('t.no_transaksi', 'ASC')
             ->get()

@@ -18,6 +18,8 @@ class JurnalPenyesuaianController extends BaseController
     {
         $tgl_awal = $this->request->getGet('tgl_awal');
         $tgl_akhir = $this->request->getGet('tgl_akhir');
+        $role = session()->get('role');
+        $bidang = session()->get('bidang');
 
         $db = \Config\Database::connect();
         $builder = $db->table('detail_transaksi dt')
@@ -25,6 +27,10 @@ class JurnalPenyesuaianController extends BaseController
             ->join('transaksi t', 'dt.id_transaksi = t.id', 'left')
             ->join('akun_3 a3', 'dt.id_akun_3 = a3.id', 'left')
             ->where('t.jenis_transaksi', 'Penyesuaian');
+
+        if ($role !== 'Admin' && $bidang !== 'Semua' && $bidang) {
+            $builder->where('t.bidang', $bidang);
+        }
 
         if ($tgl_awal && $tgl_akhir) {
             $builder->where('t.tanggal >=', $tgl_awal)
